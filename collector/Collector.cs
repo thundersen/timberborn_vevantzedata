@@ -39,6 +39,12 @@ namespace VeVantZeData.Collector
 
         private void CollectGlobalPopulation()
         {
+            if (_globalPopulation == null)
+            {
+                Plugin.Log.LogDebug("Global pop not initialized yet");
+                return;
+            }
+
             var adults = _globalPopulation.NumberOfAdults;
             var children = _globalPopulation.NumberOfChildren;
 
