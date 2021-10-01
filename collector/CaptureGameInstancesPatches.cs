@@ -12,6 +12,8 @@ namespace VeVantZeData.Collector
         {
             private static void Postfix(DistrictCenter __instance)
             {
+                Plugin.Log.LogInfo($"Capturing district center {__instance.DistrictName}");
+
                 Collector.AddDistrictCenter(__instance);
             }
         }
