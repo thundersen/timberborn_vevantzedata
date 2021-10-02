@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Timberborn.Characters;
 using Timberborn.GameDistricts;
 
@@ -19,36 +21,44 @@ namespace VeVantZeData.Collector
             _globalPopulation = globalPopulation;
         }
 
-        internal void Collect()
+        internal Data Collect()
         {
-            CollectDistrictCenters();
-            CollectGlobalPopulation();
+            var dcPops = CollectDistrictCenters();
+            var globalPops = CollectGlobalPopulation();
+
+            return new Data(globalPops, dcPops);
         }
 
-        private void CollectDistrictCenters()
+        private IDictionary<String, Pops> CollectDistrictCenters()
         {
-            foreach (var dc in _districtCenters)
-            {
-                var name = dc.DistrictName;
-                var adults = dc.DistrictPopulation.NumberOfAdults;
-                var children = dc.DistrictPopulation.NumberOfChildren;
-
-                Plugin.Log.LogInfo($"District: {name} | Adults: {adults} | Children: {children}");
-            }
+            return _districtCenters.Select(Pops).ToDictionary(x => x.Key, x => x.Value);
         }
 
-        private void CollectGlobalPopulation()
+        private KeyValuePair<String, Pops> Pops(DistrictCenter dc)
+        {
+            var name = dc.DistrictName;
+            var adults = dc.DistrictPopulation.NumberOfAdults;
+            var children = dc.DistrictPopulation.NumberOfChildren;
+
+            Plugin.Log.LogInfo($"District: {name} | Adults: {adults} | Children: {children}");
+
+            return KeyValuePair.Create(dc.DistrictName, new Pops(dc.DistrictPopulation.NumberOfAdults, dc.DistrictPopulation.NumberOfChildren));
+        }
+
+        private Pops CollectGlobalPopulation()
         {
             if (_globalPopulation == null)
             {
                 Plugin.Log.LogDebug("Global pop not initialized yet");
-                return;
+                return new Pops(0, 0);
             }
 
             var adults = _globalPopulation.NumberOfAdults;
             var children = _globalPopulation.NumberOfChildren;
 
             Plugin.Log.LogInfo($"Global - Adults: {adults} | Children: {children}");
+
+            return new Pops(adults, children);
         }
     }
 }

@@ -14,6 +14,7 @@ namespace VeVantZeData.Collector
         private float secondsSinceLastInterval;
         internal static ManualLogSource Log;
         private Collector _collector;
+        private Writer _writer;
 
         private void Awake()
         {
@@ -24,6 +25,8 @@ namespace VeVantZeData.Collector
             Logger.LogInfo($"Plugin com.thundersen.vevantzedata.timberborn.collector is loaded!");
 
             _collector = new Collector();
+
+            _writer = new Writer();
         }
 
         void Update()
@@ -31,7 +34,8 @@ namespace VeVantZeData.Collector
             secondsSinceLastInterval += Time.deltaTime;
             if (secondsSinceLastInterval > intervalSeconds)
             {
-                _collector.Collect();
+                var data = _collector.Collect();
+                _writer.Write(data);
                 secondsSinceLastInterval = 0.0f;
             }
         }
