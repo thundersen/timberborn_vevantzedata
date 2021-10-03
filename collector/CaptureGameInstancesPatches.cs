@@ -1,6 +1,7 @@
 using HarmonyLib;
 using Timberborn.Characters;
 using Timberborn.GameDistricts;
+using Timberborn.SingletonSystem;
 
 namespace VeVantZeData.Collector
 {
@@ -21,6 +22,15 @@ namespace VeVantZeData.Collector
             private static void Postfix(GlobalPopulation __instance)
             {
                 Collector.SetGlobalPopulation(__instance);
+            }
+        }
+
+        [HarmonyPatch(typeof(EventBus), MethodType.Constructor)]
+        public static class CaptureEventBus
+        {
+            private static void Postfix(EventBus __instance)
+            {
+                Plugin.SetEventBus(__instance);
             }
         }
     }

@@ -24,9 +24,16 @@
     <Reference Include="Timberborn.Common">
       <HintPath>../lib/Timberborn.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Timberborn.EntitySystem">
+      <HintPath>../lib/Timberborn.EntitySystem.dll</HintPath>
+    </Reference>
     <Reference Include="Timberborn.GameDistricts">
       <HintPath>../lib/Timberborn.GameDistricts.dll</HintPath>
     </Reference>
+    <Reference Include="Timberborn.SingletonSystem">
+      <HintPath>../lib/Timberborn.SingletonSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.Immutable" />
     <Reference Include="UnityEngine">
       <HintPath>../lib/UnityEngine.dll</HintPath>
     </Reference>
