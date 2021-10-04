@@ -8,17 +8,17 @@ namespace VeVantZeData.Collector
 {
     class Collector
     {
-        private static HashSet<DistrictCenter> _districtCenters = new HashSet<DistrictCenter>();
-        private static GlobalPopulation _globalPopulation;
+        private readonly HashSet<DistrictCenter> _districtCenters = new HashSet<DistrictCenter>();
+        private GlobalPopulation _globalPopulation;
 
-        internal static void AddDistrictCenter(DistrictCenter districtCenter)
-        {
-            _districtCenters.Add(districtCenter);
-        }
-
-        internal static void SetGlobalPopulation(GlobalPopulation globalPopulation)
+        public Collector(GlobalPopulation globalPopulation)
         {
             _globalPopulation = globalPopulation;
+        }
+
+        internal void AddDistrictCenter(DistrictCenter districtCenter)
+        {
+            _districtCenters.Add(districtCenter);
         }
 
         internal Data Collect()

@@ -1,43 +1,64 @@
 using System;
-using Timberborn.EntitySystem;
+using System.Text.RegularExpressions;
+using Timberborn.Persistence;
+using Timberborn.SingletonSystem;
 
 namespace VeVantZeData.Collector
 {
-    class Playthrough
+    class Playthrough : ISaveableSingleton, ILoadableSingleton
     {
-        private static Playthrough _instance = Default();
+        private static readonly SingletonKey _playthroughKey = new SingletonKey("VeVantZeData.Playthrough");
+        private static readonly PropertyKey<string> _mapNameKey = new PropertyKey<string>("MapName");
+		private static readonly PropertyKey<string> _factionNameKey = new PropertyKey<string>("FactionName");
+        private static readonly PropertyKey<string> _idKey = new PropertyKey<string>("ID");
 
-        internal Guid ID { get; private set; }
+        private readonly ISingletonLoader _singletonLoader;
 
-        private Playthrough(Guid id)
+        private Guid _id;
+        internal static string MapName { private get; set; }
+        internal static string FactionName { private get; set; }
+
+        public Playthrough(ISingletonLoader singletonLoader)
         {
-            ID = id;
-        }
-
-        private Playthrough() { }
-
-        // the game doesn't seem to explicitly track the playthrough.
-        // as a work around the ID of the first district center is used.
-        // the drawback of this method is that the playthrough ID will change on next load, 
-        // if the initial district center is deconstructed.
-        internal static Playthrough FromDistrictCenter(EntityComponent dc)
-        {
-            if (_instance.IsInitialized())
-                return _instance;
-
-            Plugin.Log.LogInfo($"Setting ID of first District Center as Playthrough ID: {dc.EntityId}");
-            _instance = new Playthrough(dc.EntityId);
-            return _instance;
-        }
-
-        internal static Playthrough Default()
-        {
-            return new Playthrough();
+            this._singletonLoader = singletonLoader;
         }
 
         internal bool IsInitialized()
         {
-            return (ID != default);
+            return (_id != default);
+        }
+
+        internal string ToDirectoryName()
+        {
+            return Regex.Replace($"{FactionName}_{MapName}_{_id}".ToLower(), @"\s+", "-");
+        }
+
+        public void Save(ISingletonSaver singletonSaver)
+        {
+            var singleton = singletonSaver.GetSingleton(_playthroughKey);
+            singleton.Set(_idKey, _id.ToString());
+			singleton.Set(_factionNameKey, FactionName ?? "UNKNOWN");
+			singleton.Set(_mapNameKey, MapName ?? "UNKNOWN");
+        }
+
+        public void Load()
+        {
+            if (_singletonLoader.HasSingleton(_playthroughKey))
+			{
+				var singleton = _singletonLoader.GetSingleton(_playthroughKey);
+				MapName = singleton.Get(_mapNameKey);
+				FactionName = singleton.Get(_factionNameKey);
+                _id = Guid.Parse(singleton.Get(_idKey));
+			} else {
+                _id = Guid.NewGuid();
+                Plugin.Log.LogInfo($"Assigning new playthrough ID: {_id}");
+            }
+            Plugin.Playthrough = this;
+        }
+
+        public override string ToString()
+        {
+            return $"Playthrough: {FactionName} {MapName} {_id}";
         }
     }
 }

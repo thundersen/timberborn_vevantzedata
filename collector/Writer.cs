@@ -9,17 +9,11 @@ namespace VeVantZeData.Collector
         private static char _slash = Path.DirectorySeparatorChar;
         private static string _outDir = $"{Paths.BepInExRootPath}{_slash}vevantzedata";
 
-        private Playthrough _playthrough = Playthrough.Default();
+        private readonly Playthrough _playthrough;
 
-        internal void Update(Playthrough playthrough)
+        internal Writer(Playthrough playthrough)
         {
             _playthrough = playthrough;
-
-            if (_playthrough.IsInitialized() && !Directory.Exists(PlaythroughDir()))
-            {
-                Directory.CreateDirectory(PlaythroughDir());
-                Plugin.Log.LogInfo($"Created directory {PlaythroughDir()}");
-            }
         }
 
         internal bool IsInitialized()
@@ -39,7 +33,7 @@ namespace VeVantZeData.Collector
 
         private string PlaythroughDir()
         {
-            return $"{_outDir}{_slash}{_playthrough.ID}";
+            return $"{_outDir}{_slash}{_playthrough.ToDirectoryName()}";
         }
 
         private string GlobalPopsFile()
