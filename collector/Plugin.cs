@@ -20,7 +20,6 @@ namespace VeVantZeData.Collector
         private static Writer _writer;
         private static EntityInitializationListener _entityInitializationListener;
 
-        
         internal static ManualLogSource Log { get; private set; }
 
         private void Awake()

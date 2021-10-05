@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using Timberborn.Characters;
 using Timberborn.TimeSystem;
 using Timberborn.WeatherSystem;
+using UnityEngine.SceneManagement;
 
 namespace VeVantZeData.Collector
 {
-    class TimberbornGame
+    static class TimberbornGame
     {
+        private static bool _masterSceneIsRunning;
+
         private static Playthrough _playthrough;
         internal static Playthrough Playthrough
         {
@@ -16,6 +19,7 @@ namespace VeVantZeData.Collector
             {
                 _playthrough = value;
                 Plugin.Log.LogDebug($"Updated playthrough. Assuming new game has started.");
+                _masterSceneIsRunning = true;
                 _gameStartActions.ForEach(c => c.Invoke());
             }
         }
@@ -59,12 +63,18 @@ namespace VeVantZeData.Collector
         internal static void AddGameStartCallback(Action callback)
         {
             _gameStartActions.Add(callback);
+            
+            SceneManager.activeSceneChanged += OnSceneChange;
         }
 
         internal static bool IsRunning()
         {
-            //TODO: this should become false when exiting to the main menu
-            return Playthrough != null;
+            return _masterSceneIsRunning;
+        }
+
+        private static void OnSceneChange(Scene from, Scene to) {
+            _masterSceneIsRunning = false;
+            Plugin.Log.LogDebug($"Scene changed. Assuming game is not running.");
         }
     }
 }
