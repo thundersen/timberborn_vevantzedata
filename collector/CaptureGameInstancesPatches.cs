@@ -54,14 +54,5 @@ namespace VeVantZeData.Collector
                 containerDefinition.Install(new VeVantZeDataConfigurator());
             }
         }
-
-        [HarmonyPatch(typeof(MasterSceneLauncher), "Start")]
-        public static class CaptureGameStart
-        {
-            private static void Postfix()
-            {
-                Plugin.OnGameStart();
-            }
-        }
     }
 }

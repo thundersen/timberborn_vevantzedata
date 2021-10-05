@@ -22,8 +22,28 @@ namespace VeVantZeData.Collector
         private static EntityInitializationListener _entityInitializationListener;
         private static bool _gameStarted;
 
-        internal static Playthrough Playthrough { private get; set; }
-        internal static GlobalPopulation GlobalPopulation { private get; set; }
+        private static Playthrough _playthrough;
+        internal static Playthrough Playthrough
+        {
+            private get => _playthrough;
+            set
+            {
+                _playthrough = value;
+                Log.LogDebug($"Updated playthrough. Assuming new game has started.");
+                OnGameStart();
+            }
+        }
+
+        private static GlobalPopulation _globalPopulation;
+        internal static GlobalPopulation GlobalPopulation
+        {
+            private get => _globalPopulation;
+            set
+            {
+                _globalPopulation = value;
+                Log.LogDebug($"Updated global pop.");
+            }
+        }
 
         internal static ManualLogSource Log { get; private set; }
 
@@ -55,13 +75,12 @@ namespace VeVantZeData.Collector
             _writer.Write(data);
         }
 
-        internal static void OnGameStart()
+        private static void OnGameStart()
         {
             _gameStarted = true;
             _collector = new Collector(GlobalPopulation);
             _writer = new Writer(Playthrough);
-            Log.LogInfo("New game started. Resetting.");
-            Log.LogDebug("debuggo.");
+            Log.LogDebug("Reset after game start.");
         }
 
         internal static void SetEventBus(EventBus eventBus)
@@ -72,12 +91,16 @@ namespace VeVantZeData.Collector
             _entityInitializationListener = new EntityInitializationListener(eventBus, AddDistrictCenterToCollector);
         }
 
-        private static void AddDistrictCenterToCollector(EntityComponent ec) {
+        private static void AddDistrictCenterToCollector(EntityComponent ec)
+        {
             if (!ec.HasDistrictCenter())
-                 return;
+                return;
 
-            var dc = ec.RegisteredComponents.First(c => c.GetType() == typeof(DistrictCenter));
-            _collector.AddDistrictCenter((DistrictCenter)dc);
+            var dc = (DistrictCenter)ec.RegisteredComponents.First(c => c.GetType() == typeof(DistrictCenter));
+
+            Log.LogDebug($"adding dc to collector {(dc).DistrictName}");
+
+            _collector.AddDistrictCenter(dc);
         }
     }
 }
