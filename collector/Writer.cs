@@ -16,18 +16,13 @@ namespace VeVantZeData.Collector
             _playthrough = playthrough;
         }
 
-        internal bool IsInitialized()
-        {
-            return _playthrough.IsInitialized();
-        }
-
         internal void Write(Data data)
         {
-            Write(GlobalPopsFile(), data.GlobalPops);
+            Write(GlobalPopsFile(), data.GameTime, data.GlobalPops);
 
             foreach (var kvp in data.DistrictPops)
             {
-                WriteDistrictPops(kvp.Key, kvp.Value);
+                WriteDistrictPops(kvp.Key, data.GameTime, kvp.Value);
             }
         }
 
@@ -41,11 +36,11 @@ namespace VeVantZeData.Collector
             return $"{PlaythroughDir()}{_slash}pops.csv";
         }
 
-        private void WriteDistrictPops(string districtName, Pops pops)
+        private void WriteDistrictPops(string districtName, GameTime gameTime, Pops pops)
         {
             var popsFile = DistrictPopsFileNameFor(districtName);
 
-            Write(popsFile, pops);
+            Write(popsFile, gameTime, pops);
         }
 
         private string DistrictPopsFileNameFor(string district)
@@ -53,11 +48,17 @@ namespace VeVantZeData.Collector
             return $"{PlaythroughDir()}{_slash}{district}{_slash}pops.csv";
         }
 
-        private void Write(string file, Pops pops)
+        private void Write(string file, GameTime gameTime, Pops pops)
         {
             MakeSureCsvFileExists(file);
 
-            File.AppendAllLines(file, new[] { LineFrom(pops.Adults, pops.Children, pops.Total) });
+            var line = LineFrom(
+                gameTime.TimeStamp.ToUniversalTime().ToString("o"),
+                gameTime.Cycle, gameTime.CycleDay, gameTime.TotalDay, gameTime.DayProgress.ToString("n3"),
+                pops.Adults, pops.Children, pops.Total
+                );
+
+            File.AppendAllLines(file, new[] { line });
         }
 
         private void MakeSureCsvFileExists(string file)
@@ -68,7 +69,7 @@ namespace VeVantZeData.Collector
                 Directory.CreateDirectory(dir);
 
             if (!File.Exists(file))
-                File.AppendAllLines(file, new[] { LineFrom("ADULTS", "CHILDREN", "TOTAL") });
+                File.AppendAllLines(file, new[] { LineFrom("TIMESTAMP", "CYCLE", "CYCLEDAY", "TOTALDAY", "DAYPROGRESS",  "ADULTS", "CHILDREN", "TOTAL") });
         }
 
         private string LineFrom(params Object[] values)

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Timberborn.Characters;
 using Timberborn.GameDistricts;
+using Timberborn.TimeSystem;
+using Timberborn.WeatherSystem;
 
 namespace VeVantZeData.Collector
 {
@@ -10,10 +12,14 @@ namespace VeVantZeData.Collector
     {
         private readonly HashSet<DistrictCenter> _districtCenters = new HashSet<DistrictCenter>();
         private GlobalPopulation _globalPopulation;
+        private WeatherService _weatherService;
+        private DayNightCycle _dayNightCycle;
 
-        public Collector(GlobalPopulation globalPopulation)
+        public Collector(GlobalPopulation globalPopulation, WeatherService weatherService, DayNightCycle dayNightCycle)
         {
             _globalPopulation = globalPopulation;
+            _weatherService = weatherService;
+            _dayNightCycle = dayNightCycle;
         }
 
         internal void AddDistrictCenter(DistrictCenter districtCenter)
@@ -25,8 +31,15 @@ namespace VeVantZeData.Collector
         {
             var dcPops = CollectDistrictCenters();
             var globalPops = CollectGlobalPopulation();
+            var time = CollectTime();
 
-            return new Data(globalPops, dcPops);
+            return new Data(time, globalPops, dcPops);
+        }
+
+        private GameTime CollectTime()
+        {
+            Plugin.Log.LogDebug($"Cycle {_weatherService.Cycle} Day {_weatherService.CycleDay}");
+            return new GameTime(DateTime.Now, _weatherService.Cycle, _weatherService.CycleDay, _dayNightCycle.DayNumber, _dayNightCycle.DayProgress);
         }
 
         private IDictionary<String, Pops> CollectDistrictCenters()
@@ -40,23 +53,17 @@ namespace VeVantZeData.Collector
             var adults = dc.DistrictPopulation.NumberOfAdults;
             var children = dc.DistrictPopulation.NumberOfChildren;
 
-            Plugin.Log.LogInfo($"District: {name} | Adults: {adults} | Children: {children}");
+            Plugin.Log.LogDebug($"District: {name} | Adults: {adults} | Children: {children}");
 
             return KeyValuePair.Create(dc.DistrictName, new Pops(dc.DistrictPopulation.NumberOfAdults, dc.DistrictPopulation.NumberOfChildren));
         }
 
         private Pops CollectGlobalPopulation()
         {
-            if (_globalPopulation == null)
-            {
-                Plugin.Log.LogDebug("Global pop not initialized yet");
-                return new Pops(0, 0);
-            }
-
             var adults = _globalPopulation.NumberOfAdults;
             var children = _globalPopulation.NumberOfChildren;
 
-            Plugin.Log.LogInfo($"Global - Adults: {adults} | Children: {children}");
+            Plugin.Log.LogDebug($"Global - Adults: {adults} | Children: {children}");
 
             return new Pops(adults, children);
         }

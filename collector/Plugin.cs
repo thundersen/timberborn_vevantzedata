@@ -7,7 +7,6 @@ using Timberborn.EntitySystem;
 using Timberborn.SingletonSystem;
 using UnityEngine;
 using Timberborn.GameDistricts;
-using Timberborn.Characters;
 
 namespace VeVantZeData.Collector
 {
@@ -20,31 +19,8 @@ namespace VeVantZeData.Collector
         private static Collector _collector;
         private static Writer _writer;
         private static EntityInitializationListener _entityInitializationListener;
-        private static bool _gameStarted;
 
-        private static Playthrough _playthrough;
-        internal static Playthrough Playthrough
-        {
-            private get => _playthrough;
-            set
-            {
-                _playthrough = value;
-                Log.LogDebug($"Updated playthrough. Assuming new game has started.");
-                OnGameStart();
-            }
-        }
-
-        private static GlobalPopulation _globalPopulation;
-        internal static GlobalPopulation GlobalPopulation
-        {
-            private get => _globalPopulation;
-            set
-            {
-                _globalPopulation = value;
-                Log.LogDebug($"Updated global pop.");
-            }
-        }
-
+        
         internal static ManualLogSource Log { get; private set; }
 
         private void Awake()
@@ -52,6 +28,8 @@ namespace VeVantZeData.Collector
             Log = base.Logger;
 
             Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
+
+            TimberbornGame.AddGameStartCallback(OnGameStart);
 
             Logger.LogInfo($"Plugin com.thundersen.vevantzedata.timberborn.collector is loaded!");
         }
@@ -68,7 +46,7 @@ namespace VeVantZeData.Collector
 
         void CollectIfInitialized()
         {
-            if (!_gameStarted || Playthrough == null || !_writer.IsInitialized())
+            if (!TimberbornGame.IsRunning())
                 return;
 
             var data = _collector.Collect();
@@ -77,9 +55,8 @@ namespace VeVantZeData.Collector
 
         private static void OnGameStart()
         {
-            _gameStarted = true;
-            _collector = new Collector(GlobalPopulation);
-            _writer = new Writer(Playthrough);
+            _collector = new Collector(TimberbornGame.GlobalPopulation, TimberbornGame.WeatherService, TimberbornGame.DayNightCycle);
+            _writer = new Writer(TimberbornGame.Playthrough);
             Log.LogDebug("Reset after game start.");
         }
 

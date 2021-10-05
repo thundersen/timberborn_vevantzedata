@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 
 namespace VeVantZeData.Collector {
-    record Data(Pops GlobalPops, IDictionary<String, Pops> DistrictPops);
+    record Data(GameTime GameTime, Pops GlobalPops, IDictionary<String, Pops> DistrictPops);
 
     record Pops(int Adults, int Children) {
         internal readonly int Total = Adults + Children;
     }
+
+    record GameTime(DateTime TimeStamp, int Cycle, int CycleDay, int TotalDay, float DayProgress);
 }

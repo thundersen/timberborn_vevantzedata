@@ -57,6 +57,12 @@
     <Reference Include="Timberborn.SingletonSystem">
       <HintPath>../lib/Timberborn.SingletonSystem.dll</HintPath>
     </Reference>
+    <Reference Include="Timberborn.TimeSystem">
+      <HintPath>../lib/Timberborn.TimeSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="Timberborn.WeatherSystem">
+      <HintPath>../lib/Timberborn.WeatherSystem.dll</HintPath>
+    </Reference>
     <Reference Include="System.Collections.Immutable" />
     <Reference Include="UnityEngine">
       <HintPath>../lib/UnityEngine.dll</HintPath>

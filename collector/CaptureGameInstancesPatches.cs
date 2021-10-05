@@ -5,6 +5,8 @@ using Timberborn.FactionSystemGame;
 using Timberborn.MapSystem;
 using Timberborn.MasterScene;
 using Timberborn.SingletonSystem;
+using Timberborn.TimeSystem;
+using Timberborn.WeatherSystem;
 
 namespace VeVantZeData.Collector
 {
@@ -15,7 +17,7 @@ namespace VeVantZeData.Collector
         {
             private static void Postfix(GlobalPopulation __instance)
             {
-                Plugin.GlobalPopulation = __instance;
+                TimberbornGame.GlobalPopulation = __instance;
             }
         }
 
@@ -52,6 +54,24 @@ namespace VeVantZeData.Collector
             private static void Postfix(IContainerDefinition containerDefinition)
             {
                 containerDefinition.Install(new VeVantZeDataConfigurator());
+            }
+        }
+
+        [HarmonyPatch(typeof(DayNightCycle), "Load")]
+        public static class DayNightCycleLoad
+        {
+            private static void Postfix(DayNightCycle __instance)
+            {
+                TimberbornGame.DayNightCycle = __instance;
+            }
+        }
+
+        [HarmonyPatch(typeof(WeatherService), "Load")]
+        public static class WeatherServiceLoad
+        {
+            private static void Postfix(WeatherService __instance)
+            {
+                TimberbornGame.WeatherService = __instance;
             }
         }
     }

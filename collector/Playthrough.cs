@@ -23,11 +23,6 @@ namespace VeVantZeData.Collector
             this._singletonLoader = singletonLoader;
         }
 
-        internal bool IsInitialized()
-        {
-            return (_id != default);
-        }
-
         internal string ToDirectoryName()
         {
             return Regex.Replace($"{FactionName}_{MapName}_{_id}".ToLower(), @"\s+", "-");
@@ -53,7 +48,7 @@ namespace VeVantZeData.Collector
                 _id = Guid.NewGuid();
                 Plugin.Log.LogInfo($"Assigning new playthrough ID: {_id}");
             }
-            Plugin.Playthrough = this;
+            TimberbornGame.Playthrough = this;
         }
 
         public override string ToString()
