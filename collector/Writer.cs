@@ -53,7 +53,8 @@ namespace VeVantZeData.Collector
             MakeSureCsvFileExists(file);
 
             var line = LineFrom(
-                gameTime.TimeStamp.ToUniversalTime().ToString("o"),
+                gameTime.SystemTimeStamp.ToUniversalTime().ToString("o"),
+                gameTime.GameTimeStamp.ToString("o"),
                 gameTime.Cycle, gameTime.CycleDay, gameTime.TotalDay, gameTime.DayProgress.ToString("n3"),
                 pops.Adults, pops.Children, pops.Total
                 );
@@ -69,7 +70,7 @@ namespace VeVantZeData.Collector
                 Directory.CreateDirectory(dir);
 
             if (!File.Exists(file))
-                File.AppendAllLines(file, new[] { LineFrom("TIMESTAMP", "CYCLE", "CYCLEDAY", "TOTALDAY", "DAYPROGRESS",  "ADULTS", "CHILDREN", "TOTAL") });
+                File.AppendAllLines(file, new[] { LineFrom("TIMESTAMP_SYSTEM", "TIMESTAMP_GAME", "CYCLE", "CYCLEDAY", "TOTALDAY", "DAYPROGRESS",  "ADULTS", "CHILDREN", "TOTAL") });
         }
 
         private string LineFrom(params Object[] values)

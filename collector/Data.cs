@@ -8,5 +8,5 @@ namespace VeVantZeData.Collector {
         internal readonly int Total = Adults + Children;
     }
 
-    record GameTime(DateTime TimeStamp, int Cycle, int CycleDay, int TotalDay, float DayProgress);
+    record GameTime(DateTime SystemTimeStamp, DateTime GameTimeStamp, int Cycle, int CycleDay, int TotalDay, float DayProgress);
 }
