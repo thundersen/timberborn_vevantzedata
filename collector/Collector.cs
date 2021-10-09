@@ -36,10 +36,17 @@ namespace VeVantZeData.Collector
             return new Data(time, globalPops, dcPops);
         }
 
+        private static readonly DateTime _gameStartDate = new DateTime(2100, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private static readonly int _secondsPerDay = 60 * 60 * 24;
+
         private GameTime CollectTime()
         {
-            Plugin.Log.LogDebug($"Cycle {_weatherService.Cycle} Day {_weatherService.CycleDay}");
-            return new GameTime(DateTime.Now, _weatherService.Cycle, _weatherService.CycleDay, _dayNightCycle.DayNumber, _dayNightCycle.DayProgress);
+            var secondsSinceGameStart = (_dayNightCycle.PartialDayNumber - 1) * _secondsPerDay;
+            var currentGameTime = _gameStartDate.AddSeconds(secondsSinceGameStart);
+
+            Plugin.Log.LogDebug($"partial day: {_dayNightCycle.PartialDayNumber} in seconds: {secondsSinceGameStart} \n  => game time {currentGameTime}");
+
+            return new GameTime(DateTime.Now, currentGameTime, _weatherService.Cycle, _weatherService.CycleDay, _dayNightCycle.DayNumber, _dayNightCycle.DayProgress);
         }
 
         private IDictionary<String, Pops> CollectDistrictCenters()
