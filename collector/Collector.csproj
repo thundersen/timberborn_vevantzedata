@@ -18,58 +18,25 @@
     <PackageReference Include="BepInEx.Core" Version="5.*" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" />
 
-    <Reference Include="Bindito.Core">
-      <HintPath>../lib/Bindito.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Bindito.Unity">
-      <HintPath>../lib/Bindito.Unity.dll</HintPath>
-    </Reference>
-    <Reference Include="Timberborn.Bootstrapper">
-      <HintPath>../lib/Timberborn.Bootstrapper.dll</HintPath>
-    </Reference>
-    <Reference Include="Timberborn.Characters">
-      <HintPath>../lib/Timberborn.Characters.dll</HintPath>
-    </Reference>
-    <Reference Include="Timberborn.Common">
-      <HintPath>../lib/Timberborn.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Timberborn.EntitySystem">
-      <HintPath>../lib/Timberborn.EntitySystem.dll</HintPath>
-    </Reference>
-    <Reference Include="Timberborn.FactionSystem">
-      <HintPath>../lib/Timberborn.FactionSystem.dll</HintPath>
-    </Reference>
-    <Reference Include="Timberborn.FactionSystemGame">
-      <HintPath>../lib/Timberborn.FactionSystemGame.dll</HintPath>
-    </Reference>
-    <Reference Include="Timberborn.GameDistricts">
-      <HintPath>../lib/Timberborn.GameDistricts.dll</HintPath>
-    </Reference>
-    <Reference Include="Timberborn.MapSystem">
-      <HintPath>../lib/Timberborn.MapSystem.dll</HintPath>
-    </Reference>
-    <Reference Include="Timberborn.MasterScene">
-      <HintPath>../lib/Timberborn.MasterScene.dll</HintPath>
-    </Reference>
-    <Reference Include="Timberborn.Persistence">
-      <HintPath>../lib/Timberborn.Persistence.dll</HintPath>
-    </Reference>
-    <Reference Include="Timberborn.SingletonSystem">
-      <HintPath>../lib/Timberborn.SingletonSystem.dll</HintPath>
-    </Reference>
-    <Reference Include="Timberborn.TimeSystem">
-      <HintPath>../lib/Timberborn.TimeSystem.dll</HintPath>
-    </Reference>
-    <Reference Include="Timberborn.WeatherSystem">
-      <HintPath>../lib/Timberborn.WeatherSystem.dll</HintPath>
-    </Reference>
+    <!-- References to game dlls. Place a symlink to the game folder in the project directory for these to work. -->
+    <Reference Include="Bindito.Core"/>
+    <Reference Include="Bindito.Unity"/>
+    <Reference Include="Timberborn.Bootstrapper"/>
+    <Reference Include="Timberborn.Characters"/>
+    <Reference Include="Timberborn.Common"/>
+    <Reference Include="Timberborn.EntitySystem"/>
+    <Reference Include="Timberborn.FactionSystem"/>
+    <Reference Include="Timberborn.FactionSystemGame"/>
+    <Reference Include="Timberborn.GameDistricts"/>
+    <Reference Include="Timberborn.MapSystem"/>
+    <Reference Include="Timberborn.MasterScene"/>
+    <Reference Include="Timberborn.Persistence"/>
+    <Reference Include="Timberborn.SingletonSystem"/>
+    <Reference Include="Timberborn.TimeSystem"/>
+    <Reference Include="Timberborn.WeatherSystem"/>
     <Reference Include="System.Collections.Immutable" />
-    <Reference Include="UnityEngine">
-      <HintPath>../lib/UnityEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>../lib/UnityEngine.CoreModule.dll</HintPath>
-    </Reference>
+    <Reference Include="UnityEngine"/>
+    <Reference Include="UnityEngine.CoreModule"/>
   </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
