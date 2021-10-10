@@ -36,7 +36,7 @@ namespace VeVantZeData.Collector
             return new Data(time, globalPops, dcPops);
         }
 
-        private static readonly DateTime _gameStartDate = new DateTime(2100, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private static readonly DateTime _gameStartDate = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         private static readonly int _secondsPerDay = 60 * 60 * 24;
 
         private GameTime CollectTime()

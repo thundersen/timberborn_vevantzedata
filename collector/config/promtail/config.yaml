@@ -1,0 +1,47 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: ${POSITIONS_DIR}vevantzedata_promtail_positions.yaml
+
+clients:
+  - url: http://localhost:3100/loki/api/v1/push
+
+scrape_configs:
+- job_name: timberborn
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      job: timberborn
+      __path__: ${DATA_DIR_PARENT}vevantzedata/**/*.csv
+  pipeline_stages:
+    # - drop:
+    #     expression: "TIMESTAMP.*"
+    - match:
+        selector: '{job="timberborn"}'
+        stages:
+        - regex:
+            source: filename
+            expression: 'vevantzedata\/(?P<faction>.+)_(?P<map>.+)_(?P<playthrough_id>[a-z0-9\-]+)\/'
+        - labels:
+            faction: 
+            map:
+            playthrough_id:
+    - match:
+        selector: '{job="timberborn"}'
+        stages:
+        - regex:
+            source: filename
+            expression: 'vevantzedata\/.+\/(?P<district>.+)\/'
+        - labels:
+            district:
+    - match:
+        selector: '{job="timberborn"}'
+        stages:
+        - regex:
+            expression: '[0-9\-\:T\.Z]+;(?P<timestamp>[0-9\-\:T\.Z]+).+'
+        - timestamp:
+            format: RFC3339Nano
+            source: timestamp
