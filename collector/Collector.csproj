@@ -1,23 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net46</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>VeVantZeData</AssemblyName>
     <Description>Ve Vant Ze Data Timberborn!</Description>
     <Version>0.0.1</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>9.0</LangVersion>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 
   </PropertyGroup>
 
   <ItemGroup>
+    <Reference Include="netstandard"/>
 
-    <Reference Include="netstandard" />
-
-    <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
-    <PackageReference Include="BepInEx.Core" Version="5.*" />
-    <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" />
-
+    <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all"/>
+    <PackageReference Include="BepInEx.Core" Version="5.*"/>
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*"/>
+    <PackageReference Include="InfluxDB.Client" Version="3.0.0"/>
     <!-- References to game dlls. Place a symlink to the game folder in the project directory for these to work. -->
     <Reference Include="Bindito.Core"/>
     <Reference Include="Bindito.Unity"/>
@@ -34,13 +34,13 @@
     <Reference Include="Timberborn.SingletonSystem"/>
     <Reference Include="Timberborn.TimeSystem"/>
     <Reference Include="Timberborn.WeatherSystem"/>
-    <Reference Include="System.Collections.Immutable" />
+    <Reference Include="System.Collections.Immutable"/>
     <Reference Include="UnityEngine"/>
     <Reference Include="UnityEngine.CoreModule"/>
   </ItemGroup>
-  
-  <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
+
+  <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'netstandard'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all"/>
   </ItemGroup>
 
 </Project>

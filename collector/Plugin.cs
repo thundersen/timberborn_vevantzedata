@@ -18,6 +18,7 @@ namespace VeVantZeData.Collector
         private float secondsSinceLastInterval;
         private static Collector _collector;
         private static Writer _writer;
+        private static InfluxDBWriter _influxDBWriter;
         private static EntityInitializationListener _entityInitializationListener;
 
         internal static ManualLogSource Log { get; private set; }
@@ -50,12 +51,14 @@ namespace VeVantZeData.Collector
 
             var data = _collector.Collect();
             _writer.Write(data);
+            _influxDBWriter.Write(data);
         }
 
         private static void OnGameStart()
         {
             _collector = new Collector(TimberbornGame.GlobalPopulation, TimberbornGame.WeatherService, TimberbornGame.DayNightCycle);
             _writer = new Writer(TimberbornGame.Playthrough);
+            _influxDBWriter = new InfluxDBWriter(TimberbornGame.Playthrough);
             Log.LogDebug("Reset after game start.");
         }
 
