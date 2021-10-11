@@ -20,12 +20,16 @@ namespace VeVantZeData.Collector
         private static Writer _writer;
         private static InfluxDBWriter _influxDBWriter;
         private static EntityInitializationListener _entityInitializationListener;
+        private VeVantZeDataConfig _config;
 
         internal static ManualLogSource Log { get; private set; }
+
 
         private void Awake()
         {
             Log = base.Logger;
+
+            _config = new VeVantZeDataConfig(Config);
 
             Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
 
@@ -51,14 +55,20 @@ namespace VeVantZeData.Collector
 
             var data = _collector.Collect();
             _writer.Write(data);
-            _influxDBWriter.Write(data);
+
+            if (_config.InfluxDBEnabled)
+                _influxDBWriter.Write(data);
         }
 
-        private static void OnGameStart()
+        private void OnGameStart()
         {
             _collector = new Collector(TimberbornGame.GlobalPopulation, TimberbornGame.WeatherService, TimberbornGame.DayNightCycle);
+
             _writer = new Writer(TimberbornGame.Playthrough);
-            _influxDBWriter = new InfluxDBWriter(TimberbornGame.Playthrough);
+
+            if (_config.InfluxDBEnabled)
+                _influxDBWriter = new InfluxDBWriter(_config, TimberbornGame.Playthrough);
+
             Log.LogDebug("Reset after game start.");
         }
 
