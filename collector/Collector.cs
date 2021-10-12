@@ -35,12 +35,13 @@ namespace VeVantZeData.Collector
 
         internal Data Collect()
         {
+            var time = CollectTime();
             var dcPops = CollectDistrictCenterPops();
             var globalPops = CollectGlobalPopulation();
-            var time = CollectTime();
-            var goods = CollectDistrictStocks();
+            var dcStocks = CollectDistrictStocks();
+            var globalStocks = GlobalStocksFrom(dcStocks);
 
-            return new Data(time, globalPops, dcPops, goods);
+            return new Data(time, globalPops, dcPops, globalStocks, dcStocks);
         }
 
         private static readonly DateTime _gameStartDate = new DateTime(2100, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -104,6 +105,24 @@ namespace VeVantZeData.Collector
             countingService.SwitchDistrict(previousDC);
 
             return result;
+        }
+
+        private Goods GlobalStocksFrom(IDictionary<string, Goods> districtStocks)
+        {
+            var goods = districtStocks.Values.First().Counts.Keys;
+
+            var globalCounts = new Dictionary<string, int>();
+            foreach (var districtCounts in districtStocks.Values.Select(g => g.Counts))
+            {
+                foreach (var good in goods)
+                {
+                    if (!globalCounts.ContainsKey(good))
+                        globalCounts[good] = 0;
+
+                    globalCounts[good] += districtCounts[good];
+                }
+            }
+            return new Goods(globalCounts);
         }
     }
 }
