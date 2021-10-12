@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Timberborn.Characters;
+using Timberborn.Goods;
+using Timberborn.ResourceCountingSystem;
 using Timberborn.TimeSystem;
 using Timberborn.WeatherSystem;
 using UnityEngine.SceneManagement;
@@ -55,7 +57,28 @@ namespace VeVantZeData.Collector
                 _dayNightCycle = value;
                 Plugin.Log.LogDebug($"Updated day night cycle.");
             }
-
+        }
+       
+        private static IEnumerable<GoodSpecification> _goodSpecs;
+        public static IEnumerable<GoodSpecification> GoodSpecs
+        {
+            get => _goodSpecs;
+            internal set
+            {
+                _goodSpecs = value;
+                Plugin.Log.LogDebug($"Updated good specs.");
+            }
+        }
+        
+        private static ResourceCountingService _resourceCountingService;
+        public static ResourceCountingService ResourceCountingService
+        {
+            get => _resourceCountingService;
+            internal set
+            {
+                _resourceCountingService = value;
+                Plugin.Log.LogDebug($"Updated resource counting service.");
+            }
         }
 
         private static List<Action> _gameStartActions = new List<Action>();

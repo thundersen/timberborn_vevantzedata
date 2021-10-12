@@ -28,9 +28,11 @@
     <Reference Include="Timberborn.FactionSystem"/>
     <Reference Include="Timberborn.FactionSystemGame"/>
     <Reference Include="Timberborn.GameDistricts"/>
+    <Reference Include="Timberborn.Goods"/>
     <Reference Include="Timberborn.MapSystem"/>
     <Reference Include="Timberborn.MasterScene"/>
     <Reference Include="Timberborn.Persistence"/>
+    <Reference Include="Timberborn.ResourceCountingSystem"/>
     <Reference Include="Timberborn.SingletonSystem"/>
     <Reference Include="Timberborn.TimeSystem"/>
     <Reference Include="Timberborn.WeatherSystem"/>

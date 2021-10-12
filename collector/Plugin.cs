@@ -7,6 +7,10 @@ using Timberborn.EntitySystem;
 using Timberborn.SingletonSystem;
 using UnityEngine;
 using Timberborn.GameDistricts;
+using System.Collections.Generic;
+using Timberborn.Goods;
+using Timberborn.ResourceCountingSystem;
+
 
 namespace VeVantZeData.Collector
 {
@@ -23,7 +27,6 @@ namespace VeVantZeData.Collector
         private VeVantZeDataConfig _config;
 
         internal static ManualLogSource Log { get; private set; }
-
 
         private void Awake()
         {
@@ -62,7 +65,12 @@ namespace VeVantZeData.Collector
 
         private void OnGameStart()
         {
-            _collector = new Collector(TimberbornGame.GlobalPopulation, TimberbornGame.WeatherService, TimberbornGame.DayNightCycle);
+            _collector = new Collector(
+                TimberbornGame.GlobalPopulation, 
+                TimberbornGame.WeatherService, 
+                TimberbornGame.DayNightCycle, 
+                TimberbornGame.GoodSpecs, 
+                () => TimberbornGame.ResourceCountingService);
 
             _writer = new Writer(TimberbornGame.Playthrough);
 

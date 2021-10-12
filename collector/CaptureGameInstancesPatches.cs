@@ -2,8 +2,10 @@ using Bindito.Core;
 using HarmonyLib;
 using Timberborn.Characters;
 using Timberborn.FactionSystemGame;
+using Timberborn.Goods;
 using Timberborn.MapSystem;
 using Timberborn.MasterScene;
+using Timberborn.ResourceCountingSystem;
 using Timberborn.SingletonSystem;
 using Timberborn.TimeSystem;
 using Timberborn.WeatherSystem;
@@ -72,6 +74,24 @@ namespace VeVantZeData.Collector
             private static void Postfix(WeatherService __instance)
             {
                 TimberbornGame.WeatherService = __instance;
+            }
+        }
+
+        [HarmonyPatch(typeof(GoodService), "Initialize")]
+        public static class GoodServiceInitialize
+        {
+            private static void Postfix(GoodService __instance)
+            {
+                TimberbornGame.GoodSpecs = __instance.GetGoodSpecifications();
+            }
+        }
+
+        [HarmonyPatch(typeof(ResourceCountingService), "PostLoad")]
+        public static class ResourceCountingServicePostLoad
+        {
+            private static void Postfix(ResourceCountingService __instance)
+            {
+                TimberbornGame.ResourceCountingService = __instance;
             }
         }
     }

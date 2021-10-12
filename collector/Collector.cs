@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Timberborn.Characters;
 using Timberborn.GameDistricts;
+using Timberborn.Goods;
+using Timberborn.ResourceCountingSystem;
 using Timberborn.TimeSystem;
 using Timberborn.WeatherSystem;
 
@@ -11,15 +13,19 @@ namespace VeVantZeData.Collector
     class Collector
     {
         private readonly HashSet<DistrictCenter> _districtCenters = new HashSet<DistrictCenter>();
-        private GlobalPopulation _globalPopulation;
-        private WeatherService _weatherService;
-        private DayNightCycle _dayNightCycle;
+        private readonly GlobalPopulation _globalPopulation;
+        private readonly WeatherService _weatherService;
+        private readonly DayNightCycle _dayNightCycle;
+        private readonly IEnumerable<GoodSpecification> _goodSpecs;
+        private readonly Func<ResourceCountingService> _resourceCountingService;
 
-        public Collector(GlobalPopulation globalPopulation, WeatherService weatherService, DayNightCycle dayNightCycle)
+        public Collector(GlobalPopulation globalPopulation, WeatherService weatherService, DayNightCycle dayNightCycle, IEnumerable<GoodSpecification> goodSpecs, Func<ResourceCountingService> resourceCountingService)
         {
             _globalPopulation = globalPopulation;
             _weatherService = weatherService;
             _dayNightCycle = dayNightCycle;
+            _goodSpecs = goodSpecs;
+            _resourceCountingService = resourceCountingService;
         }
 
         internal void AddDistrictCenter(DistrictCenter districtCenter)
@@ -29,11 +35,12 @@ namespace VeVantZeData.Collector
 
         internal Data Collect()
         {
-            var dcPops = CollectDistrictCenters();
+            var dcPops = CollectDistrictCenterPops();
             var globalPops = CollectGlobalPopulation();
             var time = CollectTime();
+            var goods = CollectDistrictStocks();
 
-            return new Data(time, globalPops, dcPops);
+            return new Data(time, globalPops, dcPops, goods);
         }
 
         private static readonly DateTime _gameStartDate = new DateTime(2100, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -49,7 +56,7 @@ namespace VeVantZeData.Collector
             return new GameTime(DateTime.Now, currentGameTime, _weatherService.Cycle, _weatherService.CycleDay, _dayNightCycle.DayNumber, _dayNightCycle.DayProgress);
         }
 
-        private IDictionary<String, Pops> CollectDistrictCenters()
+        private IDictionary<String, Pops> CollectDistrictCenterPops()
         {
             return _districtCenters.Select(Pops).ToDictionary(x => x.Key, x => x.Value);
         }
@@ -73,6 +80,30 @@ namespace VeVantZeData.Collector
             Plugin.Log.LogDebug($"Global - Adults: {adults} | Children: {children}");
 
             return new Pops(adults, children);
+        }
+
+        private IDictionary<string, Goods> CollectDistrictStocks()
+        {
+            var countingService = _resourceCountingService.Invoke();
+
+            // ResourceCountingService is a singleton used by the game for displaying the good amounts of the currently selected district in the ui.
+            // So it's important to reset it after we abused it.
+            var previousDC = countingService.GetInstanceField<ResourceCountingService, DistrictCenter>("_districtCenter");
+
+            var result = new Dictionary<string, Goods>();
+
+            foreach (var dc in _districtCenters)
+            {
+                countingService.SwitchDistrict(dc);
+
+                var goodCounts = _goodSpecs.ToDictionary(s => s.Id, s => countingService.GetDistrictAmount(s));
+
+                result.Add(dc.DistrictName, new Goods(goodCounts));
+            }
+
+            countingService.SwitchDistrict(previousDC);
+
+            return result;
         }
     }
 }
