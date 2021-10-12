@@ -4,6 +4,7 @@ using InfluxDB.Client.Writes;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 
 namespace VeVantZeData.Collector
@@ -36,33 +37,50 @@ namespace VeVantZeData.Collector
         {
             if (_client != null)
             {
+                var sw = Stopwatch.StartNew();
                 var points = new List<PointData>();
-                points.Add(PointFrom(data.GlobalPops, data.GameTime, "[GLOBAL]"));
-                points.AddRange(data.DistrictPops.Select(kvp => PointFrom(kvp.Value, data.GameTime, kvp.Key)));
+                points.Add(PointFrom(data.GlobalPops, data.GameTime.GameTimeStamp, "[GLOBAL]"));
+                points.AddRange(data.DistrictPops.Select(kvp => PointFrom(kvp.Value, data.GameTime.GameTimeStamp, kvp.Key)));
+                points.AddRange(data.DistrictStocks.Select(kvp => PointFrom(kvp.Value, data.GameTime.GameTimeStamp, kvp.Key)));
 
                 using (var writeApi = _client.GetWriteApi())
                 {
                     writeApi.WritePoints(_bucket, _org, points);
                 }
-
-                Plugin.Log.LogDebug($"{points.Count} points written to influxdb");
+                sw.Stop();
+                Plugin.Log.LogDebug($"{points.Count} points written to influxdb ({sw.ElapsedMilliseconds}ms)");
             }
         }
 
-        private PointData PointFrom(Pops pops, GameTime gameTime, string districName)
+        private PointData PointFrom(Pops pops, DateTime gameTime, string district)
+        {
+            return StandardPointFrom("pops", gameTime, district)
+                .Field("adults", pops.Adults)
+                .Field("kits", pops.Children);
+        }
+
+        private PointData PointFrom(Goods goods, DateTime gameTime, string district)
+        {
+            var point = StandardPointFrom("stocks", gameTime, district);
+
+            foreach (var good in goods.Counts.Keys)
+            {
+                point = point.Field(good, goods.Counts[good]);
+            }
+
+            return point;
+        }
+
+        private PointData StandardPointFrom(string measurement, DateTime gameTime, string district)
         {
             return PointData
-                    .Measurement("pops")
+                    .Measurement(measurement)
                     .Tag("game", "timberborn")
                     .Tag("playthrough_id", _playthrough.ID.ToString())
                     .Tag("faction", Playthrough.FactionName)
                     .Tag("map", Playthrough.MapName)
-                    .Tag("district", districName)
-                    .Field("cycle", gameTime.Cycle)
-                    .Field("cycle_day", gameTime.CycleDay)
-                    .Field("adults", pops.Adults)
-                    .Field("kits", pops.Children)
-                    .Timestamp(gameTime.GameTimeStamp, WritePrecision.Ms);
+                    .Tag("district", district)
+                    .Timestamp(gameTime, WritePrecision.Ms);
         }
     }
 }
