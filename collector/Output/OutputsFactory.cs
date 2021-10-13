@@ -8,7 +8,13 @@ namespace VeVantZeData.Collector.Output
 
         internal static IMetricsOutput Create(VeVantZeDataConfig config, Playthrough playthrough)
         {
-            var writers = new List<IMetricsOutput>() { new CsvWriter(playthrough) };
+            var writers = new List<IMetricsOutput>();
+
+            if (config.CsvWriterEnabled)
+                writers.Add(new CsvWriter(playthrough));
+
+            if (config.LogWriterEnabled)
+                writers.Add(new LogWriter());
 
             if (config.InfluxDBEnabled)
                 writers.Add(new InfluxDBWriter(config, playthrough));

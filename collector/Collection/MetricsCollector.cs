@@ -41,8 +41,6 @@ namespace VeVantZeData.Collector.Collection
             var secondsSinceGameStart = (_time.PartialDayNumber - 1) * _secondsPerDay;
             var currentGameTime = _gameStartDate.AddSeconds(secondsSinceGameStart);
 
-            Log.Debug($"partial day: {_time.PartialDayNumber} in seconds: {secondsSinceGameStart} \n  => game time {currentGameTime}");
-
             return new GameTime(DateTime.Now, currentGameTime, _time.Cycle, _time.CycleDay, _time.DayNumber, _time.DayProgress);
         }
 
@@ -50,11 +48,7 @@ namespace VeVantZeData.Collector.Collection
         {
             var values = dcPops.Values;
 
-            var pops = new Pops(values.Sum(p => p.Adults), values.Sum(p => p.Children));
-
-            Log.Debug($"global: {pops}");
-
-            return pops;
+            return new Pops(values.Sum(p => p.Adults), values.Sum(p => p.Children));
         }
 
         private Goods GlobalStocksFrom(IDictionary<string, Goods> districtStocks)
