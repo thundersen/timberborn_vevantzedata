@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace VeVantZeData.Collector
+namespace VeVantZeData.Collector.GameAdapters
 {
     static class ReflectionUtil
     {

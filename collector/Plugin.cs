@@ -7,10 +7,8 @@ using Timberborn.EntitySystem;
 using Timberborn.SingletonSystem;
 using UnityEngine;
 using Timberborn.GameDistricts;
-using System.Collections.Generic;
-using Timberborn.Goods;
-using Timberborn.ResourceCountingSystem;
-
+using VeVantZeData.Collector.Collection;
+using VeVantZeData.Collector.GameAdapters;
 
 namespace VeVantZeData.Collector
 {
@@ -20,7 +18,10 @@ namespace VeVantZeData.Collector
     {
         private const float intervalSeconds = 10.0f;
         private float secondsSinceLastInterval;
-        private static Collector _collector;
+        private TimeAdapter _timeAdapter;
+        private GoodsAdapter _goodsAdapter;
+        private static DistrictsAdapter _districtsAdapter;
+        private static MetricsCollector _collector;
         private static Writer _writer;
         private static InfluxDBWriter _influxDBWriter;
         private static EntityInitializationListener _entityInitializationListener;
@@ -65,12 +66,10 @@ namespace VeVantZeData.Collector
 
         private void OnGameStart()
         {
-            _collector = new Collector(
-                TimberbornGame.GlobalPopulation, 
-                TimberbornGame.WeatherService, 
-                TimberbornGame.DayNightCycle, 
-                TimberbornGame.GoodSpecs, 
-                () => TimberbornGame.ResourceCountingService);
+            _districtsAdapter = new DistrictsAdapter();
+            _timeAdapter = new TimeAdapter(TimberbornGame.WeatherService, TimberbornGame.DayNightCycle);
+            _goodsAdapter = new GoodsAdapter(_districtsAdapter, TimberbornGame.GoodSpecs, () => TimberbornGame.ResourceCountingService);
+            _collector = new MetricsCollector(_districtsAdapter, TimberbornGame.GlobalPopulation, _timeAdapter, _goodsAdapter);
 
             _writer = new Writer(TimberbornGame.Playthrough);
 
@@ -97,7 +96,7 @@ namespace VeVantZeData.Collector
 
             Log.LogDebug($"adding dc to collector {(dc).DistrictName}");
 
-            _collector.AddDistrictCenter(dc);
+            _districtsAdapter.AddDistrictCenter(dc);
         }
     }
 }

@@ -9,8 +9,27 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+    <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="NUnit" Version="3.13.2" />
     <PackageReference Include="NUnit.Console" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
+
+    <Reference Include="Timberborn.Bootstrapper"/>
+    <Reference Include="Timberborn.Characters"/>
+    <Reference Include="Timberborn.Common"/>
+    <Reference Include="Timberborn.EntitySystem"/>
+    <Reference Include="Timberborn.FactionSystem"/>
+    <Reference Include="Timberborn.FactionSystemGame"/>
+    <Reference Include="Timberborn.GameDistricts"/>
+    <Reference Include="Timberborn.Goods"/>
+    <Reference Include="Timberborn.MapSystem"/>
+    <Reference Include="Timberborn.MasterScene"/>
+    <Reference Include="Timberborn.Persistence"/>
+    <Reference Include="Timberborn.ResourceCountingSystem"/>
+    <Reference Include="Timberborn.SingletonSystem"/>
+    <Reference Include="Timberborn.TimeSystem"/>
+    <Reference Include="Timberborn.WeatherSystem"/>
   </ItemGroup>
 
 </Project>
