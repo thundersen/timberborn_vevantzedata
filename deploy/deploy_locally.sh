@@ -1,7 +1,7 @@
 #!/bin/bash
 
-NET_VERSION=`grep -oPm1 "(?<=<TargetFramework>)[^<]+" Collector.csproj`
-PROJECT_DIR=`dirname $0`/..
+NET_VERSION=`grep -oPm1 "(?<=<TargetFramework>)[^<]+" collector/Collector.csproj`
+PROJECT_DIR=`dirname $0`/../collector
 DLL_DIR=${PROJECT_DIR}/bin/Debug/${NET_VERSION}
 TARGET_DIR=~/.steam/steam/steamapps/common/Timberborn/BepInEx/plugins
 
