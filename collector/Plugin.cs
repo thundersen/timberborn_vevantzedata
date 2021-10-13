@@ -9,6 +9,7 @@ using UnityEngine;
 using Timberborn.GameDistricts;
 using VeVantZeData.Collector.Collection;
 using VeVantZeData.Collector.GameAdapters;
+using VeVantZeData.Collector.Output;
 
 namespace VeVantZeData.Collector
 {
@@ -22,8 +23,7 @@ namespace VeVantZeData.Collector
         private GoodsAdapter _goodsAdapter;
         private static DistrictsAdapter _districtsAdapter;
         private static MetricsCollector _collector;
-        private static Writer _writer;
-        private static InfluxDBWriter _influxDBWriter;
+        private IMetricsOutput _output;
         private static EntityInitializationListener _entityInitializationListener;
         private VeVantZeDataConfig _config;
 
@@ -58,10 +58,7 @@ namespace VeVantZeData.Collector
                 return;
 
             var data = _collector.Collect();
-            _writer.Write(data);
-
-            if (_config.InfluxDBEnabled)
-                _influxDBWriter.Write(data);
+            _output.Write(data);
         }
 
         private void OnGameStart()
@@ -71,10 +68,7 @@ namespace VeVantZeData.Collector
             _goodsAdapter = new GoodsAdapter(_districtsAdapter, TimberbornGame.GoodSpecs, () => TimberbornGame.ResourceCountingService);
             _collector = new MetricsCollector(_districtsAdapter, _timeAdapter, _goodsAdapter);
 
-            _writer = new Writer(TimberbornGame.Playthrough);
-
-            if (_config.InfluxDBEnabled)
-                _influxDBWriter = new InfluxDBWriter(_config, TimberbornGame.Playthrough);
+            _output = MetricsOutput.Create(_config, TimberbornGame.Playthrough);
 
             Log.LogDebug("Reset after game start.");
         }

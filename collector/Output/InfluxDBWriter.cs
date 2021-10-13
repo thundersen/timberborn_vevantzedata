@@ -7,9 +7,9 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 
-namespace VeVantZeData.Collector
+namespace VeVantZeData.Collector.Output
 {
-    class InfluxDBWriter
+    class InfluxDBWriter : IMetricsOutput
     {
         private readonly string _bucket;
         private readonly string _org;
@@ -33,7 +33,7 @@ namespace VeVantZeData.Collector
             }
         }
 
-        internal void Write(Data data)
+        public void Write(Data data)
         {
             if (_client != null)
             {

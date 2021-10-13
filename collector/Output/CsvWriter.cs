@@ -3,21 +3,21 @@ using System.IO;
 using System.Linq;
 using BepInEx;
 
-namespace VeVantZeData.Collector
+namespace VeVantZeData.Collector.Output
 {
-    class Writer
+    class CsvWriter : IMetricsOutput
     {
         private static char _slash = Path.DirectorySeparatorChar;
         private static string _outDir = $"{Paths.BepInExRootPath}{_slash}vevantzedata";
 
         private readonly Playthrough _playthrough;
 
-        internal Writer(Playthrough playthrough)
+        internal CsvWriter(Playthrough playthrough)
         {
             _playthrough = playthrough;
         }
 
-        internal void Write(Data data)
+        public void Write(Data data)
         {
             Write(GlobalPopsFile(), data.GameTime, data.GlobalPops);
             Write(GlobalGoodsFile(), data.GameTime, data.GlobalStock);
