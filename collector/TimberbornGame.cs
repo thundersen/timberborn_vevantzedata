@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Timberborn.Characters;
 using Timberborn.Goods;
 using Timberborn.ResourceCountingSystem;
 using Timberborn.TimeSystem;
@@ -23,17 +22,6 @@ namespace VeVantZeData.Collector
                 Plugin.Log.LogDebug($"Updated playthrough. Assuming new game has started.");
                 _masterSceneIsRunning = true;
                 _gameStartActions.ForEach(c => c.Invoke());
-            }
-        }
-
-        private static GlobalPopulation _globalPopulation;
-        internal static GlobalPopulation GlobalPopulation
-        {
-            get => _globalPopulation;
-            set
-            {
-                _globalPopulation = value;
-                Plugin.Log.LogDebug($"Updated global pop.");
             }
         }
 

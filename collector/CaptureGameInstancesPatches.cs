@@ -1,6 +1,5 @@
 using Bindito.Core;
 using HarmonyLib;
-using Timberborn.Characters;
 using Timberborn.FactionSystemGame;
 using Timberborn.Goods;
 using Timberborn.MapSystem;
@@ -14,15 +13,6 @@ namespace VeVantZeData.Collector
 {
     class CaptureGameInstancesPatches
     {
-        [HarmonyPatch(typeof(GlobalPopulation), "Load")]
-        public static class CaptureGlobalPopulation
-        {
-            private static void Postfix(GlobalPopulation __instance)
-            {
-                TimberbornGame.GlobalPopulation = __instance;
-            }
-        }
-
         [HarmonyPatch(typeof(EventBus), MethodType.Constructor)]
         public static class CaptureEventBus
         {

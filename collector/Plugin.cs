@@ -69,7 +69,7 @@ namespace VeVantZeData.Collector
             _districtsAdapter = new DistrictsAdapter();
             _timeAdapter = new TimeAdapter(TimberbornGame.WeatherService, TimberbornGame.DayNightCycle);
             _goodsAdapter = new GoodsAdapter(_districtsAdapter, TimberbornGame.GoodSpecs, () => TimberbornGame.ResourceCountingService);
-            _collector = new MetricsCollector(_districtsAdapter, TimberbornGame.GlobalPopulation, _timeAdapter, _goodsAdapter);
+            _collector = new MetricsCollector(_districtsAdapter, _timeAdapter, _goodsAdapter);
 
             _writer = new Writer(TimberbornGame.Playthrough);
 

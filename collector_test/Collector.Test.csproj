@@ -30,6 +30,9 @@
     <Reference Include="Timberborn.SingletonSystem"/>
     <Reference Include="Timberborn.TimeSystem"/>
     <Reference Include="Timberborn.WeatherSystem"/>
+
+    <Reference Include="UnityEngine"/>
+    <Reference Include="UnityEngine.CoreModule"/>
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Timberborn.Characters;
 using Timberborn.GameDistricts;
 using VeVantZeData.Collector.GameAdapters;
 
@@ -9,16 +8,19 @@ namespace VeVantZeData.Collector.Collection
 {
     class MetricsCollector
     {
+        internal static ILog Log = LogWrapper.Default();
+
+        private static readonly DateTime _gameStartDate = new DateTime(2100, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private static readonly int _secondsPerDay = 60 * 60 * 24;
+
         private readonly HashSet<DistrictCenter> _districtCenters = new HashSet<DistrictCenter>();
         private readonly IDistricts _districts;
-        private readonly GlobalPopulation _globalPopulation;
         private readonly IGameTime _time;
         private readonly IGoods _goods;
 
-        internal MetricsCollector(IDistricts districts, GlobalPopulation globalPopulation, IGameTime time, IGoods goods)
+        internal MetricsCollector(IDistricts districts, IGameTime time, IGoods goods)
         {
             _districts = districts;
-            _globalPopulation = globalPopulation;
             _time = time;
             _goods = goods;
         }
@@ -27,35 +29,32 @@ namespace VeVantZeData.Collector.Collection
         {
             var time = CollectTime();
             var dcPops = _districts.AllCurrentPopsByDistrict();
-            var globalPops = CollectGlobalPopulation();
+            var globalPops = GlobalPopsFrom(dcPops);
             var dcStocks = _goods.AllCurrentGoodsByDistrict();
             var globalStocks = GlobalStocksFrom(dcStocks);
 
             return new Data(time, globalPops, dcPops, globalStocks, dcStocks);
         }
 
-        private static readonly DateTime _gameStartDate = new DateTime(2100, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-        private static readonly int _secondsPerDay = 60 * 60 * 24;
-
         private GameTime CollectTime()
         {
             var secondsSinceGameStart = (_time.PartialDayNumber - 1) * _secondsPerDay;
             var currentGameTime = _gameStartDate.AddSeconds(secondsSinceGameStart);
 
-            Plugin.Log.LogDebug($"partial day: {_time.PartialDayNumber} in seconds: {secondsSinceGameStart} \n  => game time {currentGameTime}");
+            Log.Debug($"partial day: {_time.PartialDayNumber} in seconds: {secondsSinceGameStart} \n  => game time {currentGameTime}");
 
             return new GameTime(DateTime.Now, currentGameTime, _time.Cycle, _time.CycleDay, _time.DayNumber, _time.DayProgress);
         }
 
-        private Pops CollectGlobalPopulation()
+        private Pops GlobalPopsFrom(IDictionary<string, Pops> dcPops)
         {
-            //TODO: sum up district counts instead of depending on globalpopulation class
-            var adults = _globalPopulation.NumberOfAdults;
-            var children = _globalPopulation.NumberOfChildren;
+            var values = dcPops.Values;
 
-            Plugin.Log.LogDebug($"Global - Adults: {adults} | Children: {children}");
+            var pops = new Pops(values.Sum(p => p.Adults), values.Sum(p => p.Children));
 
-            return new Pops(adults, children);
+            Log.Debug($"global: {pops}");
+
+            return pops;
         }
 
         private Goods GlobalStocksFrom(IDictionary<string, Goods> districtStocks)
