@@ -4,9 +4,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "echo",
+            "label": "test and deploy locally",
             "type": "shell",
-            "command": "dotnet build && . deploy/deploy_locally.sh",
+            "command": "dotnet test && . deploy/deploy_locally.sh",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
