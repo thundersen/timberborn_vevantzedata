@@ -39,7 +39,6 @@ namespace VeVantZeData.Collector
             {
                 var sw = Stopwatch.StartNew();
                 var points = new List<PointData>();
-                points.Add(PointFrom(data.GlobalPops, data.GameTime.GameTimeStamp, "[GLOBAL]"));
                 points.AddRange(data.DistrictPops.Select(kvp => PointFrom(kvp.Value, data.GameTime.GameTimeStamp, kvp.Key)));
                 points.AddRange(data.DistrictStocks.Select(kvp => PointFrom(kvp.Value, data.GameTime.GameTimeStamp, kvp.Key)));
 
