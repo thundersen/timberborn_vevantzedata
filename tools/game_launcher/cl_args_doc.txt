@@ -1,0 +1,5 @@
+string saveName: Timberborn.MainMenuScene.AutoStarter.StartInStandaloneMode
+int maxDistance: overrides Timberborn.Navigation.NavigationDistance.Limited, default: 55
+int benchmarkLength, benchmarkSpeed, benchmarkWarmUpLength: Timberborn.Benchmarking.BenchmarkStarter -> passed as args to Benchmarker.StartBenchmark(int samplingLengthInSeconds, int warmUpLengthInSeconds, int gameSpeed)
+int vsync: sets int? Timberborn.ScreenSystem.CommandLineScreenSettings.VSyncCount, which overrides UnityEngine.QualitySettings.vSyncCount (in UnityEngine.CoreModule)
+flag safe: if set, Timberborn.SettingsSystem.Settings.GetSafe[Type] methods delete keys from UnityEngine.PlayerPrefs (in UnityEngine.CoreModule)
