@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using BepInEx;
 
 namespace VeVantZeData.Collector.Output
@@ -31,7 +32,9 @@ namespace VeVantZeData.Collector.Output
 
         private string PlaythroughDir()
         {
-            return $"{_outDir}{_slash}{_playthrough.ToDirectoryName()}";
+            var playthroughDir =  Regex.Replace($"{_playthrough.FactionName}_{_playthrough.MapName}_{_playthrough.ID}".ToLower(), @"\s+", "-");
+    
+            return $"{_outDir}{_slash}{playthroughDir}";
         }
 
         private string GlobalPopsFile()

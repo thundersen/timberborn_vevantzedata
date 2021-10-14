@@ -76,8 +76,8 @@ namespace VeVantZeData.Collector.Output
                     .Measurement(measurement)
                     .Tag("game", "timberborn")
                     .Tag("playthrough_id", _playthrough.ID.ToString())
-                    .Tag("faction", Playthrough.FactionName)
-                    .Tag("map", Playthrough.MapName)
+                    .Tag("faction", _playthrough.FactionName)
+                    .Tag("map", _playthrough.MapName)
                     .Tag("district", district)
                     .Timestamp(gameTime, WritePrecision.Ms);
         }

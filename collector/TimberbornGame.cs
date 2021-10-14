@@ -25,6 +25,29 @@ namespace VeVantZeData.Collector
             }
         }
 
+        private static string _currentFactionName;
+        internal static string CurrentFactionName
+        {
+            get => _currentFactionName;
+            set
+            {
+                _currentFactionName = value;
+                Plugin.Log.LogDebug($"Updated faction name to {value}.");
+            }
+        }
+
+        private const string _unknownMapName = "UNDETERMINED-MAP";
+        private static string _currentMapName = _unknownMapName;
+        internal static string CurrentMapName
+        {
+            get => _currentMapName;
+            set
+            {
+                _currentMapName = value;
+                Plugin.Log.LogDebug($"Updated map name to {value}.");
+            }
+        }
+
         private static WeatherService _weatherService;
         public static WeatherService WeatherService
         {
@@ -86,6 +109,16 @@ namespace VeVantZeData.Collector
         private static void OnSceneChange(Scene from, Scene to) {
             _masterSceneIsRunning = false;
             Plugin.Log.LogDebug($"Scene changed. Assuming game is not running.");
+        }
+
+        // the game only bothers with the map name when it starts a new game.
+        // new games will thus have the correct map name.
+        // loaded games with our playthrough present in the save file will get it from there.
+        // loaded games WITHOUT our playthrough will not have it. so it's important to reset it 
+        // in order to avoid that the map name from a previous newly started game is used
+        private static void ResetMapName()
+        {
+            _currentMapName = _unknownMapName;
         }
     }
 }

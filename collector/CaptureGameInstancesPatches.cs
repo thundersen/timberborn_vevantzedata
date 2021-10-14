@@ -27,7 +27,7 @@ namespace VeVantZeData.Collector
         {
             private static void Postfix(MapFileReference mapFileReference)
             {
-                Playthrough.MapName = mapFileReference.DisplayName;
+                TimberbornGame.CurrentMapName = mapFileReference.DisplayName;
             }
         }
 
@@ -36,7 +36,7 @@ namespace VeVantZeData.Collector
         {
             private static void Postfix(FactionService __instance)
             {
-                Playthrough.FactionName = __instance.Current.DisplayName;
+                TimberbornGame.CurrentFactionName = __instance.Current.DisplayName;
             }
         }
 

@@ -1,6 +1,4 @@
 using System;
-using System.Data.Common;
-using System.Text.RegularExpressions;
 using Timberborn.Persistence;
 using Timberborn.SingletonSystem;
 
@@ -14,27 +12,22 @@ namespace VeVantZeData.Collector
         private static readonly PropertyKey<string> _idKey = new PropertyKey<string>("ID");
 
         private readonly ISingletonLoader _singletonLoader;
-
+ 
         internal Guid ID { get; private set; }
-        internal static string MapName { get; set; }
-        internal static string FactionName { get; set; }
+        internal string MapName { get; private set; }
+        internal string FactionName { get; private set; }
 
         public Playthrough(ISingletonLoader singletonLoader)
         {
             this._singletonLoader = singletonLoader;
         }
 
-        internal string ToDirectoryName()
-        {
-            return Regex.Replace($"{FactionName}_{MapName}_{ID}".ToLower(), @"\s+", "-");
-        }
-
         public void Save(ISingletonSaver singletonSaver)
         {
             var singleton = singletonSaver.GetSingleton(_playthroughKey);
             singleton.Set(_idKey, ID.ToString());
-            singleton.Set(_factionNameKey, FactionName ?? "UNKNOWN");
-            singleton.Set(_mapNameKey, MapName ?? "UNKNOWN");
+            singleton.Set(_factionNameKey, FactionName);
+            singleton.Set(_mapNameKey, MapName);
         }
 
         public void Load()
@@ -48,8 +41,10 @@ namespace VeVantZeData.Collector
             }
             else
             {
+                MapName = TimberbornGame.CurrentMapName;
+                FactionName = TimberbornGame.CurrentFactionName;
                 ID = Guid.NewGuid();
-                Plugin.Log.LogInfo($"Assigning new playthrough ID: {ID}");
+                Plugin.Log.LogInfo($"Assigning new playthrough ID: {ID} Map: {MapName} Faction: {FactionName}");
             }
             TimberbornGame.Playthrough = this;
         }
