@@ -8,6 +8,7 @@ using Timberborn.ResourceCountingSystem;
 using Timberborn.SingletonSystem;
 using Timberborn.TimeSystem;
 using Timberborn.WeatherSystem;
+using VeVantZeData.Collector.GameAdapters;
 
 namespace VeVantZeData.Collector
 {
@@ -18,7 +19,7 @@ namespace VeVantZeData.Collector
         {
             private static void Postfix(EventBus __instance)
             {
-                Plugin.SetEventBus(__instance);
+                EntityListener.Init(__instance);
             }
         }
 

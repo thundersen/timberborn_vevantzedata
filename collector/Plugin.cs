@@ -2,7 +2,6 @@
 using BepInEx.Logging;
 using HarmonyLib;
 using System.Reflection;
-using Timberborn.SingletonSystem;
 using UnityEngine;
 using VeVantZeData.Collector.Collection;
 using VeVantZeData.Collector.GameAdapters;
@@ -21,7 +20,6 @@ namespace VeVantZeData.Collector
         private static DistrictsAdapter _districtsAdapter;
         private static MetricsCollector _collector;
         private IMetricsOutput _output;
-        private static EntityListener _entityListener;
         private VeVantZeDataConfig _config;
 
         internal static ManualLogSource Log { get; private set; }
@@ -70,17 +68,5 @@ namespace VeVantZeData.Collector
 
             Log.LogDebug("Reset after game start.");
         }
-
-        internal static void SetEventBus(EventBus eventBus)
-        {
-            if (_entityListener != null)
-                _entityListener.TearDown();
-
-            _entityListener = EntityListener.Builder.WithEventBus(eventBus)
-                    .WithCreationActions(DistrictCenterListener.CaptureCreatedDistrictCenter)
-                    .WithDestructionActions(DistrictCenterListener.CaptureDestroyedDistrictCenter)
-                    .Build();
-        }
-
     }
 }
