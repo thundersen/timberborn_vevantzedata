@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Timberborn.GameDistricts;
+using VeVantZeData.Collector.Scraping;
 
 namespace VeVantZeData.Collector.GameAdapters
 {

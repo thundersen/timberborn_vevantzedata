@@ -4,7 +4,7 @@ using System.Linq;
 using Timberborn.GameDistricts;
 using Timberborn.Goods;
 using Timberborn.ResourceCountingSystem;
-using VeVantZeData.Collector.Collection;
+using VeVantZeData.Collector.Scraping;
 
 namespace VeVantZeData.Collector.GameAdapters
 {

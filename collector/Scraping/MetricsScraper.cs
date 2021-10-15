@@ -4,7 +4,7 @@ using System.Linq;
 using Timberborn.GameDistricts;
 using VeVantZeData.Collector.GameAdapters;
 
-namespace VeVantZeData.Collector.Collection
+namespace VeVantZeData.Collector.Scraping
 {
     class MetricsScraper
     {

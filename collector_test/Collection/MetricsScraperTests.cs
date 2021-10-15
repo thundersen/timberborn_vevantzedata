@@ -4,7 +4,7 @@ using Moq;
 using NUnit.Framework;
 using VeVantZeData.Collector.GameAdapters;
 
-namespace VeVantZeData.Collector.Collection
+namespace VeVantZeData.Collector.Scraping
 {
     [TestFixture]
     public class MetricsScraperTests

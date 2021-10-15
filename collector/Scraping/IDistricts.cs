@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace VeVantZeData.Collector.GameAdapters
+namespace VeVantZeData.Collector.Scraping
 {
     interface IDistricts
     {

@@ -1,4 +1,4 @@
-namespace VeVantZeData.Collector.GameAdapters
+namespace VeVantZeData.Collector.Scraping
 {
     interface IGameTime
     {

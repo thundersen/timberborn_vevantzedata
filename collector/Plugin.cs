@@ -3,7 +3,7 @@ using BepInEx.Logging;
 using HarmonyLib;
 using System.Reflection;
 using UnityEngine;
-using VeVantZeData.Collector.Collection;
+using VeVantZeData.Collector.Scraping;
 using VeVantZeData.Collector.GameAdapters;
 using VeVantZeData.Collector.Output;
 

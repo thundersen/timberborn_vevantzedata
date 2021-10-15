@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace VeVantZeData.Collector.Collection
+namespace VeVantZeData.Collector.Scraping
 {
     interface IGoods
     {
