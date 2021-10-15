@@ -9,13 +9,15 @@ namespace VeVantZeData.Collector.GameAdapters
         private readonly HashSet<DistrictCenter> _districtCenters = new HashSet<DistrictCenter>();
         internal IEnumerable<DistrictCenter> DistrictCenters { get => _districtCenters; }
 
-        internal void Add(DistrictCenter districtCenter)
+        internal void Add(DistrictCenter dc)
         {
-            _districtCenters.Add(districtCenter);
+            Plugin.Log.LogDebug($"adding dc {(dc).DistrictName}");
+            _districtCenters.Add(dc);
         }
-        internal void Remove(DistrictCenter districtCenter)
+        internal void Remove(DistrictCenter dc)
         {
-            _districtCenters.Remove(districtCenter);
+            Plugin.Log.LogDebug($"removing dc {(dc).DistrictName}");
+            _districtCenters.Remove(dc);
         }
 
         public IDictionary<string, Pops> AllCurrentPopsByDistrict()

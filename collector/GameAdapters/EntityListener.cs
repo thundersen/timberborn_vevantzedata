@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Timberborn.EntitySystem;
 using Timberborn.SingletonSystem;
 
-namespace VeVantZeData.Collector
+namespace VeVantZeData.Collector.GameAdapters
 {
     class EntityListener
     {

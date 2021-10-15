@@ -2,11 +2,8 @@
 using BepInEx.Logging;
 using HarmonyLib;
 using System.Reflection;
-using System.Linq;
-using Timberborn.EntitySystem;
 using Timberborn.SingletonSystem;
 using UnityEngine;
-using Timberborn.GameDistricts;
 using VeVantZeData.Collector.Collection;
 using VeVantZeData.Collector.GameAdapters;
 using VeVantZeData.Collector.Output;
@@ -24,7 +21,7 @@ namespace VeVantZeData.Collector
         private static DistrictsAdapter _districtsAdapter;
         private static MetricsCollector _collector;
         private IMetricsOutput _output;
-        private static EntityListener _entityInitializationListener;
+        private static EntityListener _entityListener;
         private VeVantZeDataConfig _config;
 
         internal static ManualLogSource Log { get; private set; }
@@ -64,6 +61,7 @@ namespace VeVantZeData.Collector
         private void OnGameStart()
         {
             _districtsAdapter = new DistrictsAdapter();
+            DistrictCenterListener.DistrictsAdapter = _districtsAdapter;
             _timeAdapter = new TimeAdapter(TimberbornGame.WeatherService, TimberbornGame.DayNightCycle);
             _goodsAdapter = new GoodsAdapter(_districtsAdapter, TimberbornGame.GoodSpecs, () => TimberbornGame.ResourceCountingService);
             _collector = new MetricsCollector(_districtsAdapter, _timeAdapter, _goodsAdapter);
@@ -75,37 +73,14 @@ namespace VeVantZeData.Collector
 
         internal static void SetEventBus(EventBus eventBus)
         {
-            if (_entityInitializationListener != null)
-                _entityInitializationListener.TearDown();
+            if (_entityListener != null)
+                _entityListener.TearDown();
 
-            _entityInitializationListener = EntityListener.Builder.WithEventBus(eventBus)
-                    .WithCreationActions(CaptureCreatedDistrictCenter)
-                    .WithDestructionActions(CaptureDestroyedDistrictCenter)
+            _entityListener = EntityListener.Builder.WithEventBus(eventBus)
+                    .WithCreationActions(DistrictCenterListener.CaptureCreatedDistrictCenter)
+                    .WithDestructionActions(DistrictCenterListener.CaptureDestroyedDistrictCenter)
                     .Build();
         }
 
-        private static void CaptureCreatedDistrictCenter(EntityComponent ec)
-        {
-            if (!ec.HasDistrictCenter())
-                return;
-
-            var dc = (DistrictCenter)ec.RegisteredComponents.First(c => c.GetType() == typeof(DistrictCenter));
-
-            Log.LogDebug($"adding dc {(dc).DistrictName}");
-
-            _districtsAdapter.Add(dc);
-        }
-
-        private static void CaptureDestroyedDistrictCenter(EntityComponent ec)
-        {
-            if (!ec.HasDistrictCenter())
-                return;
-
-            var dc = (DistrictCenter)ec.RegisteredComponents.First(c => c.GetType() == typeof(DistrictCenter));
-
-            Log.LogDebug($"removing dc {(dc).DistrictName}");
-
-            _districtsAdapter.Remove(dc);
-        }
     }
 }
