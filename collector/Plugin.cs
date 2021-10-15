@@ -24,7 +24,7 @@ namespace VeVantZeData.Collector
         private static DistrictsAdapter _districtsAdapter;
         private static MetricsCollector _collector;
         private IMetricsOutput _output;
-        private static EntityInitializationListener _entityInitializationListener;
+        private static EntityListener _entityInitializationListener;
         private VeVantZeDataConfig _config;
 
         internal static ManualLogSource Log { get; private set; }
@@ -78,19 +78,34 @@ namespace VeVantZeData.Collector
             if (_entityInitializationListener != null)
                 _entityInitializationListener.TearDown();
 
-            _entityInitializationListener = new EntityInitializationListener(eventBus, AddDistrictCenterToCollector);
+            _entityInitializationListener = EntityListener.Builder.WithEventBus(eventBus)
+                    .WithCreationActions(CaptureCreatedDistrictCenter)
+                    .WithDestructionActions(CaptureDestroyedDistrictCenter)
+                    .Build();
         }
 
-        private static void AddDistrictCenterToCollector(EntityComponent ec)
+        private static void CaptureCreatedDistrictCenter(EntityComponent ec)
         {
             if (!ec.HasDistrictCenter())
                 return;
 
             var dc = (DistrictCenter)ec.RegisteredComponents.First(c => c.GetType() == typeof(DistrictCenter));
 
-            Log.LogDebug($"adding dc to collector {(dc).DistrictName}");
+            Log.LogDebug($"adding dc {(dc).DistrictName}");
 
-            _districtsAdapter.AddDistrictCenter(dc);
+            _districtsAdapter.Add(dc);
+        }
+
+        private static void CaptureDestroyedDistrictCenter(EntityComponent ec)
+        {
+            if (!ec.HasDistrictCenter())
+                return;
+
+            var dc = (DistrictCenter)ec.RegisteredComponents.First(c => c.GetType() == typeof(DistrictCenter));
+
+            Log.LogDebug($"removing dc {(dc).DistrictName}");
+
+            _districtsAdapter.Remove(dc);
         }
     }
 }

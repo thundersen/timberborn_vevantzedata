@@ -9,9 +9,13 @@ namespace VeVantZeData.Collector.GameAdapters
         private readonly HashSet<DistrictCenter> _districtCenters = new HashSet<DistrictCenter>();
         internal IEnumerable<DistrictCenter> DistrictCenters { get => _districtCenters; }
 
-        internal void AddDistrictCenter(DistrictCenter districtCenter)
+        internal void Add(DistrictCenter districtCenter)
         {
             _districtCenters.Add(districtCenter);
+        }
+        internal void Remove(DistrictCenter districtCenter)
+        {
+            _districtCenters.Remove(districtCenter);
         }
 
         public IDictionary<string, Pops> AllCurrentPopsByDistrict()
@@ -30,5 +34,6 @@ namespace VeVantZeData.Collector.GameAdapters
 
             return KeyValuePair.Create(dc.DistrictName, new Pops(dc.DistrictPopulation.NumberOfAdults, dc.DistrictPopulation.NumberOfChildren));
         }
+
     }
 }
