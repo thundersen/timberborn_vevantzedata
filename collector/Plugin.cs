@@ -2,10 +2,6 @@
 using BepInEx.Logging;
 using HarmonyLib;
 using System.Reflection;
-using UnityEngine;
-using VeVantZeData.Collector.Scraping;
-using VeVantZeData.Collector.GameAdapters;
-using VeVantZeData.Collector.Output;
 
 namespace VeVantZeData.Collector
 {
@@ -13,60 +9,23 @@ namespace VeVantZeData.Collector
     [BepInProcess("Timberborn.exe")]
     public class Plugin : BaseUnityPlugin
     {
-        private const float intervalSeconds = 10.0f;
-        private float secondsSinceLastInterval;
-        private TimeAdapter _timeAdapter;
-        private GoodsAdapter _goodsAdapter;
-        private static DistrictsAdapter _districtsAdapter;
-        private static MetricsScraper _collector;
-        private IMetricsOutput _output;
-        private VeVantZeDataConfig _config;
-
         internal static ManualLogSource Log { get; private set; }
+        private Collector _collector;
 
         private void Awake()
         {
             Log = base.Logger;
 
-            _config = new VeVantZeDataConfig(Config);
-
             Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
 
-            TimberbornGame.AddGameStartCallback(OnGameStart);
+            _collector = new Collector(new VeVantZeDataConfig(Config));
 
             Logger.LogInfo($"Plugin com.thundersen.vevantzedata.timberborn.collector is loaded!");
         }
 
         void Update()
         {
-            secondsSinceLastInterval += Time.deltaTime;
-            if (secondsSinceLastInterval > intervalSeconds)
-            {
-                CollectIfInitialized();
-                secondsSinceLastInterval = 0.0f;
-            }
-        }
-
-        void CollectIfInitialized()
-        {
-            if (!TimberbornGame.IsRunning())
-                return;
-
-            var data = _collector.Collect();
-            _output.Write(data);
-        }
-
-        private void OnGameStart()
-        {
-            _districtsAdapter = new DistrictsAdapter();
-            DistrictCenterListener.DistrictsAdapter = _districtsAdapter;
-            _timeAdapter = new TimeAdapter(TimberbornGame.WeatherService, TimberbornGame.DayNightCycle);
-            _goodsAdapter = new GoodsAdapter(_districtsAdapter, TimberbornGame.GoodSpecs, () => TimberbornGame.ResourceCountingService);
-            _collector = new MetricsScraper(_districtsAdapter, _timeAdapter, _goodsAdapter);
-
-            _output = MetricsOutput.Create(_config, TimberbornGame.Playthrough);
-
-            Log.LogDebug("Reset after game start.");
+            _collector.Update();
         }
     }
 }

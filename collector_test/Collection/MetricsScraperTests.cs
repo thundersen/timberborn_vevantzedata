@@ -2,7 +2,6 @@
 using System.Linq;
 using Moq;
 using NUnit.Framework;
-using VeVantZeData.Collector.GameAdapters;
 
 namespace VeVantZeData.Collector.Scraping
 {
@@ -25,14 +24,14 @@ namespace VeVantZeData.Collector.Scraping
         {
             var districtPops = pops.Split(" ").Select(Pops).ToArray();
             var sut = SutWith(DistrictsWith(districtPops));
-            Assert.That(sut.Collect().GlobalPops, Is.EqualTo(Pops(expected)));
+            Assert.That(sut.Scrape().GlobalPops, Is.EqualTo(Pops(expected)));
         }
 
         [Test]
         public void CountsZeroGlobalPopsWhenThereAreNoDistricts()
         {
             var sut = SutWith(DistrictsWith());
-            Assert.That(sut.Collect().GlobalPops, Is.EqualTo(new Pops(0, 0)));
+            Assert.That(sut.Scrape().GlobalPops, Is.EqualTo(new Pops(0, 0)));
         }
 
         private Pops Pops(string p)

@@ -25,7 +25,7 @@ namespace VeVantZeData.Collector.Scraping
             _goods = goods;
         }
 
-        internal Data Collect()
+        internal Data Scrape()
         {
             var time = CollectTime();
             var dcPops = _districts.AllCurrentPopsByDistrict();
