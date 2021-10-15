@@ -7,7 +7,7 @@ using VeVantZeData.Collector.GameAdapters;
 namespace VeVantZeData.Collector.Collection
 {
     [TestFixture]
-    public class MetricsCollectorTests
+    public class MetricsScraperTests
     {
         private IGoods _defaultgoods = Mock.Of<IGoods>(g => g.AllCurrentGoodsByDistrict() == new Dictionary<string, Goods>() { { "a", new Goods(new Dictionary<string, int>()) } });
         private IGameTime _defaultGameTime = Mock.Of<IGameTime>();
@@ -15,7 +15,7 @@ namespace VeVantZeData.Collector.Collection
         [OneTimeSetUp]
         public void BeforeAll()
         {
-            MetricsCollector.Log = new Mock<ILog>().Object;
+            MetricsScraper.Log = new Mock<ILog>().Object;
         }
 
         [TestCase("1,1", "1,1")]
@@ -41,9 +41,9 @@ namespace VeVantZeData.Collector.Collection
             return new Pops(int.Parse(split[0]), int.Parse(split[1]));
         }
 
-        private MetricsCollector SutWith(IDistricts districts)
+        private MetricsScraper SutWith(IDistricts districts)
         {
-            return new MetricsCollector(districts, _defaultGameTime, _defaultgoods);
+            return new MetricsScraper(districts, _defaultGameTime, _defaultgoods);
         }
 
         private IDistricts DistrictsWith(params Pops[] pops)

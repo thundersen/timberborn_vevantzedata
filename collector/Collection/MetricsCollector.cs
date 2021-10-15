@@ -6,7 +6,7 @@ using VeVantZeData.Collector.GameAdapters;
 
 namespace VeVantZeData.Collector.Collection
 {
-    class MetricsCollector
+    class MetricsScraper
     {
         internal static ILog Log = LogWrapper.Default();
 
@@ -18,7 +18,7 @@ namespace VeVantZeData.Collector.Collection
         private readonly IGameTime _time;
         private readonly IGoods _goods;
 
-        internal MetricsCollector(IDistricts districts, IGameTime time, IGoods goods)
+        internal MetricsScraper(IDistricts districts, IGameTime time, IGoods goods)
         {
             _districts = districts;
             _time = time;

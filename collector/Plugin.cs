@@ -18,7 +18,7 @@ namespace VeVantZeData.Collector
         private TimeAdapter _timeAdapter;
         private GoodsAdapter _goodsAdapter;
         private static DistrictsAdapter _districtsAdapter;
-        private static MetricsCollector _collector;
+        private static MetricsScraper _collector;
         private IMetricsOutput _output;
         private VeVantZeDataConfig _config;
 
@@ -62,7 +62,7 @@ namespace VeVantZeData.Collector
             DistrictCenterListener.DistrictsAdapter = _districtsAdapter;
             _timeAdapter = new TimeAdapter(TimberbornGame.WeatherService, TimberbornGame.DayNightCycle);
             _goodsAdapter = new GoodsAdapter(_districtsAdapter, TimberbornGame.GoodSpecs, () => TimberbornGame.ResourceCountingService);
-            _collector = new MetricsCollector(_districtsAdapter, _timeAdapter, _goodsAdapter);
+            _collector = new MetricsScraper(_districtsAdapter, _timeAdapter, _goodsAdapter);
 
             _output = MetricsOutput.Create(_config, TimberbornGame.Playthrough);
 
