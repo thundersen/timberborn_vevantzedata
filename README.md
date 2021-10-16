@@ -3,7 +3,7 @@
 
 This is a mod for the game [Timberborn by Mechanistry](https://mechanistry.com/).
 
-Read about its features [here](doc/USER_GUIDE.md)
+Read about its features [here](doc/USER_GUIDE.md).
 
 ## Manual Installation
 

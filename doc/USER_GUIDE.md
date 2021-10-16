@@ -4,7 +4,9 @@
 
 Timberborn doesn't show us any statistics or graphs about our cities' development over time. It's hard to answer basic questions like "How much water did this district have a few days ago?" "Can our farms keep up with our food consumption?"
 
-Eventually the game will surely (hopefully?) improve in that regard, but if you're a numbers nerd and/or you are absolutely determined to min/max the hell out of your beavers, you will always want more data, more graphs than what the game will show you. You may even want to get an alert when certain conditions are met, so that you can run the game in the background without worrying about coming back to a graveyard where everyone has died of thirst and your huge construction project never got finished. 
+Eventually the game will surely (hopefully?) improve in that regard, but if you're a numbers nerd and/or you are absolutely determined to min/max the hell out of your beavers, you will always want more data, more graphs than what the game will show you. If you're like me than you have been annoyed by the lack of data and visualization options in other games in the past.
+
+ You may even want to get an alert when certain conditions are met, so that you can run the game in the background without worrying about coming back to a graveyard where everyone has died of thirst and your huge construction project never got finished. 
 
 This mod attempts to solve that problem by gathering all kinds of useful data in-game and exporting it out of the game in a format that allows the use of tools for advanced data analysis, visualization and alerting.
 
@@ -13,7 +15,7 @@ This mod attempts to solve that problem by gathering all kinds of useful data in
 
 Development of this mod has only just started. It's currently collecting data for resource stockpiles and population by district, which already allows a visualization like this:
 
-![example dashboard](docs/example_dashboard.png)
+![example dashboard](example_dashboard.png)
 
 So all the data for creating basic alerts for food or water running out is already there. More will come in the future. Please do [submit your ideas](#feedback)!
 
@@ -45,7 +47,7 @@ After installation you will need to set up 3 things in InfluxDB for the mod to b
 [Grafana](https://grafana.com/grafana/) is an open source data visualization tool which can create nice graphs like the ones in the example dasboard above and much more. Free download is available [here](https://grafana.com/grafana/download?pg=get&plcmt=selfmanaged-box1-cta1&edition=oss).
 
 Set up InfluxDB as a data source. It should look like this:
-![influx data source](docs/grafana_influx_data_source.png)
+![influx data source](grafana_influx_data_source.png)
 
 Note that "Flux" is set as query language, not InfluxQL. This is required for the example dashboard to work. 
 Grafana also needs a [token](https://docs.influxdata.com/influxdb/cloud/security/tokens/create-token/) to be abe to read from InfluxDB. This one needs read access. Paste the token value into the Token field under InfluxDB Details in your Grafana data source settings.
