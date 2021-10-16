@@ -28,6 +28,7 @@ namespace VeVantZeData.Collector.Output
                 _bucket = config.InfluxDBBucket;
                 _org = config.InfluxDBOrg;
                 _client = InfluxDBClientFactory.Create(config.InfluxDBAddress, token.ToCharArray());
+                _client.SetLogLevel(config.InfluxDBClientLogLevel);
                 Plugin.Log.LogDebug("influx db client created.");
                 _client.HealthAsync().ContinueWith(t => Plugin.Log.LogDebug(t.Result)).Wait();
             }
