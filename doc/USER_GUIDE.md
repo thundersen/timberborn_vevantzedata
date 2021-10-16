@@ -47,6 +47,7 @@ After installation you will need to set up 3 things in InfluxDB for the mod to b
 [Grafana](https://grafana.com/grafana/) is an open source data visualization tool which can create nice graphs like the ones in the example dasboard above and much more. Free download is available [here](https://grafana.com/grafana/download?pg=get&plcmt=selfmanaged-box1-cta1&edition=oss).
 
 Set up InfluxDB as a data source. It should look like this:
+
 ![influx data source](grafana_influx_data_source.png)
 
 Note that "Flux" is set as query language, not InfluxQL. This is required for the example dashboard to work. 
@@ -85,6 +86,12 @@ I expect the game to eventually support naming playthroughs. At that point the c
 - In-game alerts. Define your own alerts and receive a notification in game.
 - Support for IRL alerts. Define alerts and hook up smart home devices, get a text message or what have you. Note that this is already possible for those that know how to set it up with InfluxDB! Examples and guides will follow in the future. 
 - Integration with other mods to allow them to use ze data as well, e.g., for showing graphs in-game, using alerts to automate buildings, ...
+
+
+## Known Issues
+
+- If you go back in time by **reloading from an older save**, this will mess up the data. A simple workaround is this: Open the save file you want to reload. Search for "Playthrough". Change the Playthrough ID to a new value. This must be a valid GUID, which you can generate [here](https://guidgenerator.com/online-guid-generator.aspx). The mod will now treat this save as its own playthrough.
+- If you **load from a save that was generated before the mod was active**, it will generate a new Playthrough. Unfortunately there is no way to determine the name of the map when you load from a save. So it will be stored as `UNDETERMINED-MAP`.
 
 ## <a name="feedback">Feedback</a>
 
