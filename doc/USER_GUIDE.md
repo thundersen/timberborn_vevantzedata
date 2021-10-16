@@ -53,7 +53,9 @@ Set up InfluxDB as a data source. It should look like this:
 Note that "Flux" is set as query language, not InfluxQL. This is required for the example dashboard to work. 
 Grafana also needs a [token](https://docs.influxdata.com/influxdb/cloud/security/tokens/create-token/) to be abe to read from InfluxDB. This one needs read access. Paste the token value into the Token field under InfluxDB Details in your Grafana data source settings.
 
-TODO: EXAMPLE DASHBOARD
+You can import the [example dashboard](https://raw.githubusercontent.com/thundersen/timberborn_vevantzedata/281885f67ccc3ee8c3d2d6b641b3e20373f11960/tools/grafana/example_dashboard.json) included in the GitHub repo to get started. Download the JSON file and [import](https://grafana.com/docs/grafana/latest/dashboards/export-import/) it into your Grafana instance.
+
+
 
 ## <a name="config">Config Settings</a>
 
