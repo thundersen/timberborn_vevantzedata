@@ -4,7 +4,7 @@
 
 Timberborn doesn't show us any statistics or graphs about our cities' development over time. It's hard to answer basic questions like "How much water did this district have a few days ago?" "Can our farms keep up with our food consumption?"
 
-Eventually the game will surely (hopefully?) improve in that regard, but if you're a numbers nerd and/or you are absolutely determined to min/max the hell out of your beavers, you will always want more data, more graphs than what the game will show you. If you're like me than you have been annoyed by the lack of data and visualization options in other games in the past.
+Eventually the game will surely (hopefully?) improve in that regard, but if you're a numbers nerd and/or you are absolutely determined to min/max the hell out of your beavers, you will always want more data, more graphs than what the game will show you. If you're like me, you have been annoyed by the lack of data and visualization options in other games in the past.
 
  You may even want to get an alert when certain conditions are met, so that you can run the game in the background without worrying about coming back to a graveyard where everyone has died of thirst and your huge construction project never got finished. 
 
@@ -30,7 +30,7 @@ If enabled, CSV files are written to the directory `BepInEx/vevantzedata`. (You 
 
 [InfluxDB](https://www.influxdata.com/products/influxdb/) is an open source database which specializes in time series data. Using it allows advanced real-time visualization and alerting. Free download is available [here](https://portal.influxdata.com/downloads/). 
 
-> Unfortunately setting up InfluxDB for yourself requires a certain amount of work and tech-savviness on your end. Nothing I can do about that at the moment. I'm thinking about ways to simplify this, but I'm not sure, if it's worth prioritizing. Please [reach out](#feedback), if you're interested in using the advanced features that InfluxDB allows, but can't (be bothered to ;)) set up InfluxDB. This will at least show me that I should come up with a way to simplify this setup.
+> Unfortunately setting up InfluxDB for yourself requires a certain amount of work and tech-savviness on your end. Nothing I can do about that at the moment. I'm thinking about ways to simplify this, but I'm not sure, if it's worth prioritizing. Please [reach out](#feedback), if you're interested in using the advanced features that InfluxDB allows, but can't (be bothered to ;)) set it up. This will at least show me that I should come up with a way to simplify this setup.
 
 Walking you through the process of installing and setting it up is out of the scope of this doc, but it's fairly simple for a database this powerful. [Here](https://docs.influxdata.com/influxdb/v2.0/install/?t=Windows)'s an installation guide for windows.
 
