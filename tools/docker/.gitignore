@@ -1,0 +1,10 @@
+*.env
+*.db
+*.log
+**/sessions/
+grafana/var/lib/plugins
+influxdb/var/lib/data/*
+influxdb/var/lib/wal
+
+# ignore generated configration file
+grafana/etc/provisioning/datasources/datasource.yaml
