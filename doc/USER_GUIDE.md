@@ -15,7 +15,7 @@ This mod attempts to solve that problem by gathering all kinds of useful data in
 
 Development of this mod has only just started. It's currently collecting data for resource stockpiles and population by district, which already allows a visualization like this:
 
-![example dashboard](example_dashboard.png)
+![example dashboard](https://raw.githubusercontent.com/thundersen/timberborn_vevantzedata/main/doc/example_dashboard.png)
 
 So all the data for creating basic alerts for food or water running out is already there. More will come in the future. Please do [submit your ideas](#feedback)!
 
@@ -48,7 +48,7 @@ After installation you will need to set up 3 things in InfluxDB for the mod to b
 
 Set up InfluxDB as a data source. It should look like this:
 
-![influx data source](grafana_influx_data_source.png)
+![influx data source](https://raw.githubusercontent.com/thundersen/timberborn_vevantzedata/main/doc/grafana_influx_data_source.png)
 
 Note that "Flux" is set as query language, not InfluxQL. This is required for the example dashboard to work. 
 Grafana also needs a [token](https://docs.influxdata.com/influxdb/cloud/security/tokens/create-token/) to be abe to read from InfluxDB. This one needs read access. Paste the token value into the Token field under InfluxDB Details in your Grafana data source settings.
