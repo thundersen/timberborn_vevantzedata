@@ -16,7 +16,7 @@
         {
             "label": "build release",
             "type": "shell",
-            "command": "dotnet test -c Release && . release/package_github.sh",
+            "command": "dotnet test -c Release && . release/github/package.sh && . release/thunderstore/package.sh",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
