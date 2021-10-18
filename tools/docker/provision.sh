@@ -30,7 +30,7 @@ TOKENS=$(docker exec -i \
   -e INFLUX_ORG="${DOCKER_INFLUXDB_INIT_ORG}" \
   -e INFLUX_BUCKET_NAME="${DOCKER_INFLUXDB_INIT_BUCKET}" \
   -e INFLUX_TOKEN="${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}" \
-  influxdb sh < ../influxdb/create_tokens.sh)
+  influxdb bash < ../influxdb/create_tokens.sh)
 
 GRAFANA_TOKEN=$(echo "${TOKENS}" | head -n1)
 MOD_TOKEN=$(echo "${TOKENS}" | tail -n1)
@@ -45,5 +45,6 @@ sed -e 's/%%INFLUXDB_ORG%%/'${DOCKER_INFLUXDB_INIT_ORG}'/g' \
 echo "==> start grafana"
 docker-compose up -d grafana
 
-echo ">>> done. now you need to create this environment variable for the mod:"
+echo "==> done"
+echo "now you need to create this environment variable for the mod:"
 echo "VEVANTZEDATA_INFLUXDB_TOKEN=${MOD_TOKEN}"

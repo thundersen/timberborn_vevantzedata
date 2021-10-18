@@ -1,9 +1,24 @@
-#!/bin/sh
+#!/bin/bash
+
+set -eu
+
+function determine_token {
+    set +e
+    MATCHES=$(influx auth list | grep -c "$1")
+    set -e
+
+    if [ ${MATCHES} -ne 0 ]; then
+        # using a regex for the jwt, because sometimes the output of "influx auth list"
+        # seemed to contain tabs between columns which messed up "cut"
+        influx auth list | grep "$1" | grep -o '[a-zA-Z0-9\=\_\-]*==' | head -n1
+        echo "reusing existing $1" >&2
+    else
+        influx auth create $2 --description "$1" | cut -f3 | tail -n1
+        echo "created new $1" >&2
+    fi
+}
 
 ID=$(influx bucket list --name ${INFLUX_BUCKET_NAME} | cut -f1 | tail -n1)
 
-GRAFANA_TOKEN=$(influx auth create --read-bucket ${ID} --description "Read Token for Grafana" | cut -f3 | tail -n1)
-
-MOD_TOKEN=$(influx auth create --write-bucket ${ID} --description "Write Token for VeVantZeData Mod" | cut -f3 | tail -n1)
-
-echo "${GRAFANA_TOKEN}\n${MOD_TOKEN}"
+determine_token "Read Token for Grafana" "--read-bucket ${ID}"
+determine_token "Write Token for VeVantZeData Mod" "--write-bucket ${ID}"
