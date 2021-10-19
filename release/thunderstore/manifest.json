@@ -1,6 +1,6 @@
 {
     "name": "VeVantZeData",
-    "version_number": "0.1.1",
+    "version_number": "0.1.2",
     "website_url": "https://github.com/thundersen/timberborn_vevantzedata",
     "description": "Stream metrics from the game into InfluxDB and/or CSV files",
     "dependencies": [
