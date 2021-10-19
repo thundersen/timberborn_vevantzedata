@@ -28,3 +28,7 @@ See [here](https://github.com/thundersen/timberborn_vevantzedata/tree/main/doc/K
 ## Feedback
 
 Any feedback is welcome. You can reach me on the Timberborn Discord (`thundersen#0586`), Reddit (https://www.reddit.com/user/7hund3r53n) or create a GitHub issue [here](https://github.com/thundersen/timberborn_vevantzedata/issues).
+
+---
+Icon background made by [Freepik](https://www.freepik.com) from https://www.flaticon.com (and props to TheExcess for suggesting it!)
+
