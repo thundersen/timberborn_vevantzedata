@@ -1,0 +1,4 @@
+## Known Issues
+
+- If you go back in time by **reloading from an older save**, this will mess up the data. A simple workaround is this: Open the save file you want to reload. Search for "Playthrough". Change the Playthrough ID to a new value. This must be a valid GUID, which you can generate [here](https://guidgenerator.com/online-guid-generator.aspx). The mod will now treat this save as its own playthrough.
+- If you **load from a save that was generated before the mod was active**, it will generate a new Playthrough. Unfortunately there is no way to determine the name of the map when you load from a save. So it will be stored as `UNDETERMINED-MAP`.
