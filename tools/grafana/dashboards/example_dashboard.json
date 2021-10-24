@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 3,
-  "iteration": 1634582167690,
+  "id": 2,
+  "iteration": 1635081842461,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -117,7 +117,7 @@
       "repeat": null,
       "targets": [
         {
-          "query": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"stocks\")\n  |> filter(fn: (r) => r[\"district\"] =~ /${District:pipe}/)\n  |> filter(fn: (r) => r[\"playthrough_id\"] =~ /${Playthrough:pipe}/)\n  |> filter(fn: (r) => r[\"faction\"] =~ /${Faction:pipe}/)\n  |> aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: false)\n \n\n",
+          "query": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"stocks\")\n  |> filter(fn: (r) => r[\"district\"] =~ /${District:pipe}/)\n  |> filter(fn: (r) => r[\"playthrough_id\"] =~ /${Playthrough:pipe}/)\n  |> filter(fn: (r) => r[\"faction\"] =~ /${Faction:pipe}/)\n  |> filter(fn: (r) => r[\"settlement\"] =~ /${Settlement:pipe}/)\n  |> aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: false)\n \n\n",
           "refId": "A"
         }
       ],
@@ -199,7 +199,7 @@
       "repeat": null,
       "targets": [
         {
-          "query": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"pops\")\n  |> filter(fn: (r) => r[\"_field\"] =~ /^(adults|kits)/)\n  |> filter(fn: (r) => r[\"district\"] =~ /${District:pipe}/)\n  |> filter(fn: (r) => r[\"playthrough_id\"] =~ /${Playthrough:pipe}/)\n  |> filter(fn: (r) => r[\"faction\"] =~ /${Faction:pipe}/)\n  |> aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: false)\n \n\n",
+          "query": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"pops\")\n  |> filter(fn: (r) => r[\"_field\"] =~ /^(adults|kits)/)\n  |> filter(fn: (r) => r[\"district\"] =~ /${District:pipe}/)\n  |> filter(fn: (r) => r[\"playthrough_id\"] =~ /${Playthrough:pipe}/)\n  |> filter(fn: (r) => r[\"faction\"] =~ /${Faction:pipe}/)\n  |> filter(fn: (r) => r[\"settlement\"] =~ /${Settlement:pipe}/)\n  |> aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: false)\n \n\n",
           "refId": "A"
         }
       ],
@@ -216,9 +216,13 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
-          "text": "All",
-          "value": "$__all"
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
         },
         "datasource": null,
         "definition": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> group(columns: [\"playthrough_id\"])\n  |> distinct(column: \"playthrough_id\")\n  |> keep(columns: [\"_value\"])",
@@ -320,6 +324,34 @@
         "skipUrlSync": false,
         "sort": 1,
         "type": "query"
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": null,
+        "definition": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> group(columns: [\"settlement\"])\n  |> distinct(column: \"settlement\")\n  |> keep(columns: [\"_value\"])",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": null,
+        "multi": true,
+        "name": "Settlement",
+        "options": [],
+        "query": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> group(columns: [\"settlement\"])\n  |> distinct(column: \"settlement\")\n  |> keep(columns: [\"_value\"])",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
       }
     ]
   },
@@ -331,5 +363,5 @@
   "timezone": "utc",
   "title": "VeVantZeData Example Dashboard",
   "uid": "ufjMolD7z",
-  "version": 33
+  "version": 1
 }
