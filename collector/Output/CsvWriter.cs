@@ -32,7 +32,7 @@ namespace VeVantZeData.Collector.Output
 
         private string PlaythroughDir()
         {
-            var playthroughDir =  Regex.Replace($"{_playthrough.FactionName}_{_playthrough.MapName}_{_playthrough.ID}".ToLower(), @"\s+", "-");
+            var playthroughDir =  Regex.Replace($"{_playthrough.SettlementName}_{_playthrough.FactionName}_{_playthrough.MapName}_{_playthrough.ID}".ToLower(), @"\s+", "-");
     
             return $"{_outDir}{_slash}{playthroughDir}";
         }

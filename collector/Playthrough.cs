@@ -12,10 +12,11 @@ namespace VeVantZeData.Collector
         private static readonly PropertyKey<string> _idKey = new PropertyKey<string>("ID");
 
         private readonly ISingletonLoader _singletonLoader;
- 
+
         internal Guid ID { get; private set; }
         internal string MapName { get; private set; }
         internal string FactionName { get; private set; }
+        internal string SettlementName { get => TimberbornGame.SettlementName; }
 
         public Playthrough(ISingletonLoader singletonLoader)
         {

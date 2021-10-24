@@ -79,6 +79,7 @@ namespace VeVantZeData.Collector.Output
                     .Tag("playthrough_id", _playthrough.ID.ToString())
                     .Tag("faction", _playthrough.FactionName)
                     .Tag("map", _playthrough.MapName)
+                    .Tag("settlement", _playthrough.SettlementName)
                     .Tag("district", district)
                     .Timestamp(gameTime, WritePrecision.Ms);
         }
