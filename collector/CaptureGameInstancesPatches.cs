@@ -1,3 +1,4 @@
+using System;
 using Bindito.Core;
 using HarmonyLib;
 using Timberborn.FactionSystemGame;
@@ -5,6 +6,8 @@ using Timberborn.Goods;
 using Timberborn.MapSystem;
 using Timberborn.MasterScene;
 using Timberborn.ResourceCountingSystem;
+using Timberborn.SettlementNameSystem;
+using Timberborn.SettlementNameSystemUI;
 using Timberborn.SingletonSystem;
 using Timberborn.TimeSystem;
 using Timberborn.WeatherSystem;
@@ -83,6 +86,33 @@ namespace VeVantZeData.Collector
             private static void Postfix(ResourceCountingService __instance)
             {
                 TimberbornGame.ResourceCountingService = __instance;
+            }
+        }
+
+        [HarmonyPatch(typeof(SettlementNameService), "Load")]
+        public static class SettlementNameServiceLoad
+        {
+            private static void Postfix(SettlementNameService __instance)
+            {
+                TimberbornGame.SettlementName = __instance.SettlementName;
+            }
+        }
+
+        [HarmonyPatch(typeof(SettlementNameBoxShower), "ShowDisallowingCancelling")]
+        public static class SettlementNameBoxShowerShowDisallowingCancelling
+        {
+            private static void Prefix(ref Action<string> confirmButtonCallback)
+            {
+                confirmButtonCallback = DecorateCallback(confirmButtonCallback);
+            }
+
+            private static Action<string> DecorateCallback(Action<string> confirmButtonCallback)
+            {
+                return name =>
+                {
+                    TimberbornGame.SettlementName = name;
+                    confirmButtonCallback.Invoke(name);
+                };
             }
         }
     }

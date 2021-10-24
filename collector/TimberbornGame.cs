@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Timberborn.Goods;
 using Timberborn.ResourceCountingSystem;
+using Timberborn.SettlementNameSystem;
 using Timberborn.TimeSystem;
 using Timberborn.WeatherSystem;
 using UnityEngine.SceneManagement;
@@ -69,7 +70,7 @@ namespace VeVantZeData.Collector
                 Plugin.Log.LogDebug($"Updated day night cycle.");
             }
         }
-       
+
         private static IEnumerable<GoodSpecification> _goodSpecs;
         public static IEnumerable<GoodSpecification> GoodSpecs
         {
@@ -80,7 +81,7 @@ namespace VeVantZeData.Collector
                 Plugin.Log.LogDebug($"Updated good specs.");
             }
         }
-        
+
         private static ResourceCountingService _resourceCountingService;
         public static ResourceCountingService ResourceCountingService
         {
@@ -92,12 +93,23 @@ namespace VeVantZeData.Collector
             }
         }
 
+        private static string _settlementName;
+        public static string SettlementName
+        {
+            get => _settlementName;
+            internal set
+            {
+                _settlementName = value;
+                Plugin.Log.LogDebug($"Updated settlement name to {value}");
+            }
+        }
+
         private static List<Action> _gameStartActions = new List<Action>();
 
         internal static void AddGameStartCallback(Action callback)
         {
             _gameStartActions.Add(callback);
-            
+
             SceneManager.activeSceneChanged += OnSceneChange;
         }
 
@@ -106,7 +118,8 @@ namespace VeVantZeData.Collector
             return _masterSceneIsRunning;
         }
 
-        private static void OnSceneChange(Scene from, Scene to) {
+        private static void OnSceneChange(Scene from, Scene to)
+        {
             _masterSceneIsRunning = false;
             Plugin.Log.LogDebug($"Scene changed. Assuming game is not running.");
         }

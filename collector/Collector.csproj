@@ -33,6 +33,8 @@
     <Reference Include="Timberborn.MasterScene"/>
     <Reference Include="Timberborn.Persistence"/>
     <Reference Include="Timberborn.ResourceCountingSystem"/>
+    <Reference Include="Timberborn.SettlementNameSystem"/>
+    <Reference Include="Timberborn.SettlementNameSystemUI"/>
     <Reference Include="Timberborn.SingletonSystem"/>
     <Reference Include="Timberborn.TimeSystem"/>
     <Reference Include="Timberborn.WeatherSystem"/>
