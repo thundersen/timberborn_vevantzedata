@@ -21,6 +21,10 @@ Currently resource stockpiles and population counts are captured, but much more 
 - Support for IRL alerts. Define alerts and hook up smart home devices, get a text message or what have you. Note that this is already possible for those that know how to set it up with InfluxDB! Examples and guides will follow in the future. 
 - Integration with other mods to allow them to use ze data as well, e.g., for showing graphs in-game, using alerts to automate buildings, ...
 
+## Changelog
+
+See [here](https://github.com/thundersen/timberborn_vevantzedata/tree/main/doc/CHANGELOG.md)
+
 ## Known Issues
 
 See [here](https://github.com/thundersen/timberborn_vevantzedata/tree/main/doc/KNOWN_ISSUES.md)

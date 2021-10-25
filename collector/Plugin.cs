@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace VeVantZeData.Collector
 {
-    [BepInPlugin("com.thundersen.vevantzedata.collector", "Ve Vant Ze Data Timberborn!", "0.1.0.0")]
+    [BepInPlugin("com.thundersen.vevantzedata.collector", "Ve Vant Ze Data Timberborn!", "0.1.4")]
     [BepInProcess("Timberborn.exe")]
     public class Plugin : BaseUnityPlugin
     {
