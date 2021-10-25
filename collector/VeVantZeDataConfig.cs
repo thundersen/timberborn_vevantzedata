@@ -13,6 +13,8 @@ namespace VeVantZeData.Collector
         internal bool LogWriterEnabled { get; private set; }
         internal bool CsvWriterEnabled { get; private set; }
 
+        internal bool EventPublisherEnabled { get; private set; }
+
         internal VeVantZeDataConfig(ConfigFile config)
         {
             InfluxDBEnabled = config.Bind("writers:influxdb", "enabled", false, "Activate writing metrics to InfluxDB").Value;
@@ -24,6 +26,8 @@ namespace VeVantZeData.Collector
             LogWriterEnabled = config.Bind("writers:log", "enabled", false, "Activate writing an overview of collected metrics to LogOutput.log").Value;
 
             CsvWriterEnabled = config.Bind("writers:csv", "enabled", true, "Activate writing metrics to CSV files").Value;
+
+            EventPublisherEnabled = config.Bind("writers:events", "enabled", true, "Activate events for other mods").Value;
         }
 
         private InfluxDB.Client.Core.LogLevel ReadInfluxLogLevel(ConfigFile config)

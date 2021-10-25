@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Timberborn.SingletonSystem;
 
 namespace VeVantZeData.Collector.Output
 {
@@ -6,7 +7,7 @@ namespace VeVantZeData.Collector.Output
     {
         private List<IMetricsOutput> _writers;
 
-        internal static IMetricsOutput Create(VeVantZeDataConfig config, Playthrough playthrough)
+        internal static IMetricsOutput Create(VeVantZeDataConfig config, Playthrough playthrough, EventBus eventBus)
         {
             var writers = new List<IMetricsOutput>();
 
@@ -18,6 +19,9 @@ namespace VeVantZeData.Collector.Output
 
             if (config.InfluxDBEnabled)
                 writers.Add(new InfluxDBWriter(config, playthrough));
+
+            if (config.EventPublisherEnabled)
+                writers.Add(new EventPublisher(eventBus));
             
             return new MetricsOutput(writers);
         }

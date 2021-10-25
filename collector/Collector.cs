@@ -43,13 +43,14 @@ namespace VeVantZeData.Collector
 
         private void OnGameStart()
         {
+            EntityListener.Init(TimberbornGame.EventBus);
             _districtsAdapter = new DistrictsAdapter();
             DistrictCenterListener.DistrictsAdapter = _districtsAdapter;
             _timeAdapter = new TimeAdapter(TimberbornGame.WeatherService, TimberbornGame.DayNightCycle);
             _goodsAdapter = new GoodsAdapter(_districtsAdapter, TimberbornGame.GoodSpecs, () => TimberbornGame.ResourceCountingService);
             _scraper = new MetricsScraper(_districtsAdapter, _timeAdapter, _goodsAdapter);
 
-            _output = MetricsOutput.Create(_config, TimberbornGame.Playthrough);
+            _output = MetricsOutput.Create(_config, TimberbornGame.Playthrough, TimberbornGame.EventBus);
 
             Plugin.Log.LogDebug("Reset after game start.");
         }

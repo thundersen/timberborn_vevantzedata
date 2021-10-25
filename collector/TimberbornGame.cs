@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Timberborn.Goods;
 using Timberborn.ResourceCountingSystem;
-using Timberborn.SettlementNameSystem;
+using Timberborn.SingletonSystem;
 using Timberborn.TimeSystem;
 using Timberborn.WeatherSystem;
 using UnityEngine.SceneManagement;
@@ -101,6 +101,17 @@ namespace VeVantZeData.Collector
             {
                 _settlementName = value;
                 Plugin.Log.LogDebug($"Updated settlement name to {value}");
+            }
+        }
+
+        private static EventBus _eventBus;
+        public static EventBus EventBus
+        {
+            get => _eventBus;
+            internal set
+            {
+                _eventBus = value;
+                Plugin.Log.LogDebug($"Updated event bus");
             }
         }
 
