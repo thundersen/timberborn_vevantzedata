@@ -9,6 +9,8 @@ It streams data from the game to [InfluxDB](https://www.influxdata.com/) and/or 
 
 Read more about its features [here](doc/FEATURES.md).
 
+Check out the change log [here](doc/CHANGELOG.md).
+
 
 ## Thunderstore
 
