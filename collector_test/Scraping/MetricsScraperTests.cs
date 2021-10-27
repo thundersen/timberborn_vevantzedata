@@ -10,6 +10,7 @@ namespace VeVantZeData.Collector.Scraping
     {
         private IGoods _defaultgoods = Mock.Of<IGoods>(g => g.AllCurrentGoodsByDistrict() == new Dictionary<string, Goods>() { { "a", new Goods(new Dictionary<string, int>()) } });
         private IGameTime _defaultGameTime = Mock.Of<IGameTime>();
+        private IDerivedMetricsCalculator _derivedMetrics = Mock.Of<IDerivedMetricsCalculator>();
 
         [OneTimeSetUp]
         public void BeforeAll()
@@ -34,6 +35,15 @@ namespace VeVantZeData.Collector.Scraping
             Assert.That(sut.Scrape().GlobalPops, Is.EqualTo(new Pops(0, 0)));
         }
 
+        [Test]
+        public void AddsDerivedMetrics()
+        {
+            var expected = new DaysOfStocks(0, 0);
+            var derivedMetrics = Mock.Of<IDerivedMetricsCalculator>(g => g.CalculateDaysOfStocks() == expected);
+            var sut = SutWith(derivedMetrics);
+            Assert.That(sut.Scrape().DaysOfStocks, Is.SameAs(expected));
+        }
+
         private Pops Pops(string p)
         {
             var split = p.Split(",");
@@ -42,7 +52,12 @@ namespace VeVantZeData.Collector.Scraping
 
         private MetricsScraper SutWith(IDistricts districts)
         {
-            return new MetricsScraper(districts, _defaultGameTime, _defaultgoods);
+            return new MetricsScraper(districts, _defaultGameTime, _defaultgoods, _derivedMetrics);
+        }
+
+        private MetricsScraper SutWith(IDerivedMetricsCalculator derivedMetrics)
+        {
+            return new MetricsScraper(DistrictsWith(), _defaultGameTime, _defaultgoods, derivedMetrics);
         }
 
         private IDistricts DistrictsWith(params Pops[] pops)

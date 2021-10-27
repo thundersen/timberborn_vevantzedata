@@ -48,7 +48,7 @@ namespace VeVantZeData.Collector
             DistrictCenterListener.DistrictsAdapter = _districtsAdapter;
             _timeAdapter = new TimeAdapter(TimberbornGame.WeatherService, TimberbornGame.DayNightCycle);
             _goodsAdapter = new GoodsAdapter(_districtsAdapter, TimberbornGame.GoodSpecs, () => TimberbornGame.ResourceCountingService);
-            _scraper = new MetricsScraper(_districtsAdapter, _timeAdapter, _goodsAdapter);
+            _scraper = new MetricsScraper(_districtsAdapter, _timeAdapter, _goodsAdapter, new DerivedMetricsCalculator());
 
             _output = MetricsOutput.Create(_config, TimberbornGame.Playthrough, TimberbornGame.EventBus);
 

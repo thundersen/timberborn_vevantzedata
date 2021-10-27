@@ -16,12 +16,14 @@ namespace VeVantZeData.Collector.Scraping
         private readonly IDistricts _districts;
         private readonly IGameTime _time;
         private readonly IGoods _goods;
+        private readonly IDerivedMetricsCalculator _derivedMetrics;
 
-        internal MetricsScraper(IDistricts districts, IGameTime time, IGoods goods)
+        internal MetricsScraper(IDistricts districts, IGameTime time, IGoods goods, IDerivedMetricsCalculator derivedMetrics)
         {
             _districts = districts;
             _time = time;
             _goods = goods;
+            _derivedMetrics = derivedMetrics;
         }
 
         internal Data Scrape()
@@ -31,8 +33,9 @@ namespace VeVantZeData.Collector.Scraping
             var globalPops = GlobalPopsFrom(dcPops);
             var dcStocks = _goods.AllCurrentGoodsByDistrict();
             var globalStocks = GlobalStocksFrom(dcStocks);
+            var daysOfStocks = _derivedMetrics.CalculateDaysOfStocks();
 
-            return new Data(time, globalPops, dcPops, globalStocks, dcStocks);
+            return new Data(time, globalPops, dcPops, globalStocks, dcStocks, daysOfStocks);
         }
 
         private GameTime CollectTime()
