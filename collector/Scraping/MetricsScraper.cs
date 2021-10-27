@@ -33,7 +33,7 @@ namespace VeVantZeData.Collector.Scraping
             var globalPops = GlobalPopsFrom(dcPops);
             var dcStocks = _goods.AllCurrentGoodsByDistrict();
             var globalStocks = GlobalStocksFrom(dcStocks);
-            var daysOfStocks = _derivedMetrics.CalculateDaysOfStocks();
+            var daysOfStocks = _derivedMetrics.CalculateDaysOfStocks(dcStocks, dcPops);
 
             return new Data(time, globalPops, dcPops, globalStocks, dcStocks, daysOfStocks);
         }

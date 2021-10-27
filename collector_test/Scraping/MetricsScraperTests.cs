@@ -38,10 +38,13 @@ namespace VeVantZeData.Collector.Scraping
         [Test]
         public void AddsDerivedMetrics()
         {
-            var expected = new DaysOfStocks(0, 0);
-            var derivedMetrics = Mock.Of<IDerivedMetricsCalculator>(g => g.CalculateDaysOfStocks() == expected);
+            var expected = new Dictionary<string, DaysOfStocks>();
+            var derivedMetrics = Mock.Of<IDerivedMetricsCalculator>(g => g.CalculateDaysOfStocks(
+                It.IsAny<IDictionary<string, Goods>>(), 
+                It.IsAny<IDictionary<string, Pops>>()) 
+                == expected);
             var sut = SutWith(derivedMetrics);
-            Assert.That(sut.Scrape().DaysOfStocks, Is.SameAs(expected));
+            Assert.That(sut.Scrape().DistrictDaysOfStocks, Is.SameAs(expected));
         }
 
         private Pops Pops(string p)

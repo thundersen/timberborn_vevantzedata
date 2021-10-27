@@ -8,7 +8,7 @@ namespace VeVantZeData.Collector {
         IDictionary<String, Pops> DistrictPops, 
         Goods GlobalStock, 
         IDictionary<String, Goods> DistrictStocks,
-        DaysOfStocks DaysOfStocks);
+        IDictionary<String, DaysOfStocks> DistrictDaysOfStocks);
 
     public record Pops(int Adults, int Children) {
         internal readonly int Total = Adults + Children;
