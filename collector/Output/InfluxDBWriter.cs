@@ -42,6 +42,7 @@ namespace VeVantZeData.Collector.Output
                 var points = new List<PointData>();
                 points.AddRange(data.DistrictPops.Select(kvp => PointFrom(kvp.Value, data.GameTime.GameTimeStamp, kvp.Key)));
                 points.AddRange(data.DistrictStocks.Select(kvp => PointFrom(kvp.Value, data.GameTime.GameTimeStamp, kvp.Key)));
+                points.AddRange(data.DistrictDaysOfStocks.Select(kvp => PointFrom(kvp.Value, data.GameTime.GameTimeStamp, kvp.Key)));
 
                 using (var writeApi = _client.GetWriteApi())
                 {
@@ -69,6 +70,13 @@ namespace VeVantZeData.Collector.Output
             }
 
             return point;
+        }
+
+        private PointData PointFrom(DaysOfStocks daysOfStocks, DateTime gameTime, string district)
+        {
+            return StandardPointFrom("days_of_stocks", gameTime, district)
+                .Field("water", daysOfStocks.Water)
+                .Field("food", daysOfStocks.Food);
         }
 
         private PointData StandardPointFrom(string measurement, DateTime gameTime, string district)
