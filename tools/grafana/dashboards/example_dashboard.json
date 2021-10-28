@@ -117,7 +117,7 @@
       "repeat": null,
       "targets": [
         {
-          "query": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"stocks\")\n  |> filter(fn: (r) => r[\"district\"] =~ /${District:pipe}/)\n  |> filter(fn: (r) => r[\"playthrough_id\"] =~ /${Playthrough:pipe}/)\n  |> filter(fn: (r) => r[\"faction\"] =~ /${Faction:pipe}/)\n  |> filter(fn: (r) => r[\"map\"] =~ /${Map:pipe}/)\n  |> filter(fn: (r) => r[\"settlement\"] =~ /${Settlement:pipe}/)\n  |> aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: false)\n \n\n",
+          "query": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"stocks\")\n  |> filter(fn: (r) => r[\"district\"] =~ /${District:regex}/)\n  |> filter(fn: (r) => r[\"playthrough_id\"] =~ /${Playthrough:regex}/)\n  |> filter(fn: (r) => r[\"faction\"] =~ /${Faction:regex}/)\n  |> filter(fn: (r) => r[\"map\"] =~ /${Map:regex}/)\n  |> filter(fn: (r) => r[\"settlement\"] =~ /${Settlement:regex}/)\n  |> aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: false)\n \n\n",
           "refId": "A"
         }
       ],
@@ -233,7 +233,7 @@
       },
       "targets": [
         {
-          "query": "foodPerDay = 2.4\nwaterPerDay = 2.0\n\nfood = from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"stocks\")\n  |> filter(fn: (r) => r[\"district\"] =~ /${District:pipe}/)\n  |> filter(fn: (r) => r[\"playthrough_id\"] =~ /${Playthrough:pipe}/)\n  |> filter(fn: (r) => r[\"faction\"] =~ /${Faction:pipe}/)\n  |> filter(fn: (r) => r[\"map\"] =~ /${Map:pipe}/)\n  |> filter(fn: (r) => r[\"settlement\"] =~ /${Settlement:pipe}/)\n  |> filter(fn: (r) => r._field == \"Bread\" or r._field == \"GrilledPotato\" or r._field == \"Carrot\" or r._field == \"Berries\" or r._field == \"Water\")\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({ r with TotalFood: r.Bread + r.GrilledPotato + r.Carrot + r.Berries}))\n  |> keep(columns: [\"TotalFood\", \"Water\", \"_time\"])\n\npops = from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"pops\")\n  |> filter(fn: (r) => r[\"district\"] =~ /${District:pipe}/)\n  |> filter(fn: (r) => r[\"playthrough_id\"] =~ /${Playthrough:pipe}/)\n  |> filter(fn: (r) => r[\"faction\"] =~ /${Faction:pipe}/)\n  |> filter(fn: (r) => r[\"settlement\"] =~ /${Settlement:pipe}/)\n  |> filter(fn: (r) => r._field == \"adults\" or r._field == \"kits\")\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({ r with TotalPops: r.adults + r.kits}))\n  |> keep(columns: [\"TotalPops\", \"_time\"])\n\njoin(tables: {food: food, pops: pops}, on: [\"_time\"])\n  |> map(fn: (r) => ({r with \n    Food: float(v: r.TotalFood) / float(v: r.TotalPops) / foodPerDay, \n    Water: float(v: r.Water) / float(v: r.TotalPops) / waterPerDay\n  }))\n  |> aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: false, column: \"Food\")\n  |> keep(columns: [\"Food\", \"Water\", \"_time\"])",
+          "query": "foodPerDay = 2.4\nwaterPerDay = 2.0\n\nfood = from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"stocks\")\n  |> filter(fn: (r) => r[\"district\"] =~ /${District:regex}/)\n  |> filter(fn: (r) => r[\"playthrough_id\"] =~ /${Playthrough:regex}/)\n  |> filter(fn: (r) => r[\"faction\"] =~ /${Faction:regex}/)\n  |> filter(fn: (r) => r[\"map\"] =~ /${Map:regex}/)\n  |> filter(fn: (r) => r[\"settlement\"] =~ /${Settlement:regex}/)\n  |> filter(fn: (r) => r._field == \"Bread\" or r._field == \"GrilledPotato\" or r._field == \"Carrot\" or r._field == \"Berries\" or r._field == \"Water\")\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({ r with TotalFood: r.Bread + r.GrilledPotato + r.Carrot + r.Berries}))\n  |> keep(columns: [\"TotalFood\", \"Water\", \"_time\"])\n\npops = from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"pops\")\n  |> filter(fn: (r) => r[\"district\"] =~ /${District:regex}/)\n  |> filter(fn: (r) => r[\"playthrough_id\"] =~ /${Playthrough:regex}/)\n  |> filter(fn: (r) => r[\"faction\"] =~ /${Faction:regex}/)\n  |> filter(fn: (r) => r[\"settlement\"] =~ /${Settlement:regex}/)\n  |> filter(fn: (r) => r._field == \"adults\" or r._field == \"kits\")\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({ r with TotalPops: r.adults + r.kits}))\n  |> keep(columns: [\"TotalPops\", \"_time\"])\n\njoin(tables: {food: food, pops: pops}, on: [\"_time\"])\n  |> map(fn: (r) => ({r with \n    Food: float(v: r.TotalFood) / float(v: r.TotalPops) / foodPerDay, \n    Water: float(v: r.Water) / float(v: r.TotalPops) / waterPerDay\n  }))\n  |> aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: false, column: \"Food\")\n  |> keep(columns: [\"Food\", \"Water\", \"_time\"])",
           "refId": "A"
         }
       ],
@@ -315,7 +315,7 @@
       "repeat": null,
       "targets": [
         {
-          "query": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"pops\")\n  |> filter(fn: (r) => r[\"_field\"] =~ /^(adults|kits)/)\n  |> filter(fn: (r) => r[\"district\"] =~ /${District:pipe}/)\n  |> filter(fn: (r) => r[\"playthrough_id\"] =~ /${Playthrough:pipe}/)\n  |> filter(fn: (r) => r[\"faction\"] =~ /${Faction:pipe}/)\n  |> filter(fn: (r) => r[\"map\"] =~ /${Map:pipe}/)\n  |> filter(fn: (r) => r[\"settlement\"] =~ /${Settlement:pipe}/)\n  |> aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: false)\n \n\n",
+          "query": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"pops\")\n  |> filter(fn: (r) => r[\"_field\"] =~ /^(adults|kits)/)\n  |> filter(fn: (r) => r[\"district\"] =~ /${District:regex}/)\n  |> filter(fn: (r) => r[\"playthrough_id\"] =~ /${Playthrough:regex}/)\n  |> filter(fn: (r) => r[\"faction\"] =~ /${Faction:regex}/)\n  |> filter(fn: (r) => r[\"map\"] =~ /${Map:regex}/)\n  |> filter(fn: (r) => r[\"settlement\"] =~ /${Settlement:regex}/)\n  |> aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: false)\n \n\n",
           "refId": "A"
         }
       ],
@@ -341,7 +341,7 @@
           ]
         },
         "datasource": null,
-        "definition": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> group(columns: [\"settlement\"])\n  |> distinct(column: \"settlement\")\n  |> keep(columns: [\"_value\"])",
+        "definition": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"pops\")\n  |> group(columns: [\"settlement\"])\n  |> distinct(column: \"settlement\")\n  |> keep(columns: [\"_value\"])",
         "description": null,
         "error": null,
         "hide": 0,
@@ -350,7 +350,7 @@
         "multi": true,
         "name": "Settlement",
         "options": [],
-        "query": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> group(columns: [\"settlement\"])\n  |> distinct(column: \"settlement\")\n  |> keep(columns: [\"_value\"])",
+        "query": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"pops\")\n  |> group(columns: [\"settlement\"])\n  |> distinct(column: \"settlement\")\n  |> keep(columns: [\"_value\"])",
         "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
@@ -369,7 +369,7 @@
           ]
         },
         "datasource": null,
-        "definition": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> group(columns: [\"playthrough_id\"])\n  |> distinct(column: \"playthrough_id\")\n  |> keep(columns: [\"_value\"])",
+        "definition": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"pops\")\n  |> group(columns: [\"playthrough_id\"])\n  |> distinct(column: \"playthrough_id\")\n  |> keep(columns: [\"_value\"])",
         "description": "Unique ID for a playthrough. Usually unnecessary since settlement name was introduced, but still useful when renaming settlements",
         "error": null,
         "hide": 0,
@@ -378,7 +378,7 @@
         "multi": true,
         "name": "Playthrough",
         "options": [],
-        "query": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> group(columns: [\"playthrough_id\"])\n  |> distinct(column: \"playthrough_id\")\n  |> keep(columns: [\"_value\"])",
+        "query": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"pops\")\n  |> group(columns: [\"playthrough_id\"])\n  |> distinct(column: \"playthrough_id\")\n  |> keep(columns: [\"_value\"])",
         "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
@@ -397,7 +397,7 @@
           ]
         },
         "datasource": null,
-        "definition": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> group(columns: [\"faction\"])\n  |> distinct(column: \"faction\")\n  |> keep(columns: [\"_value\"])",
+        "definition": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"pops\")\n  |> group(columns: [\"faction\"])\n  |> distinct(column: \"faction\")\n  |> keep(columns: [\"_value\"])",
         "description": null,
         "error": null,
         "hide": 0,
@@ -406,7 +406,7 @@
         "multi": true,
         "name": "Faction",
         "options": [],
-        "query": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> group(columns: [\"faction\"])\n  |> distinct(column: \"faction\")\n  |> keep(columns: [\"_value\"])",
+        "query": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"pops\")\n  |> group(columns: [\"faction\"])\n  |> distinct(column: \"faction\")\n  |> keep(columns: [\"_value\"])",
         "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
@@ -425,7 +425,7 @@
           ]
         },
         "datasource": null,
-        "definition": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> group(columns: [\"map\"])\n  |> distinct(column: \"map\")\n  |> keep(columns: [\"_value\"])",
+        "definition": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"pops\")\n  |> group(columns: [\"map\"])\n  |> distinct(column: \"map\")\n  |> keep(columns: [\"_value\"])",
         "description": null,
         "error": null,
         "hide": 0,
@@ -434,7 +434,7 @@
         "multi": true,
         "name": "Map",
         "options": [],
-        "query": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> group(columns: [\"map\"])\n  |> distinct(column: \"map\")\n  |> keep(columns: [\"_value\"])",
+        "query": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"pops\")\n  |> group(columns: [\"map\"])\n  |> distinct(column: \"map\")\n  |> keep(columns: [\"_value\"])",
         "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
@@ -453,7 +453,7 @@
           ]
         },
         "datasource": null,
-        "definition": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> group(columns: [\"district\"])\n  |> distinct(column: \"district\")\n  |> keep(columns: [\"_value\"])",
+        "definition": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"pops\")\n  |> group(columns: [\"district\"])\n  |> distinct(column: \"district\")\n  |> keep(columns: [\"_value\"])",
         "description": null,
         "error": null,
         "hide": 0,
@@ -462,7 +462,7 @@
         "multi": true,
         "name": "District",
         "options": [],
-        "query": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> group(columns: [\"district\"])\n  |> distinct(column: \"district\")\n  |> keep(columns: [\"_value\"])",
+        "query": "from(bucket: \"vevantzedata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"pops\")\n  |> group(columns: [\"district\"])\n  |> distinct(column: \"district\")\n  |> keep(columns: [\"_value\"])",
         "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
