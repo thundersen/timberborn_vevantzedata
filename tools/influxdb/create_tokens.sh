@@ -21,4 +21,4 @@ function determine_token {
 ID=$(influx bucket list --name ${INFLUX_BUCKET_NAME} | cut -f1 | tail -n1)
 
 determine_token "Read Token for Grafana" "--read-bucket ${ID}"
-determine_token "Write Token for VeVantZeData Mod" "--write-bucket ${ID}"
+determine_token "Write Token for VeVantZeData Mod" "--write-bucket ${ID} --read-orgs --read-tasks --write-tasks --read-checks --write-checks"

@@ -12,3 +12,4 @@ cp -v ${DLL_DIR}/InfluxDB.Client*.dll ${TARGET_DIR}
 cp -v ${DLL_DIR}/Microsoft.Extensions.ObjectPool.dll ${TARGET_DIR}
 cp -v ${DLL_DIR}/System.Reactive.dll ${TARGET_DIR}
 cp -v ${DLL_DIR}/RestSharp.dll ${TARGET_DIR}
+cp -v ${DLL_DIR}/JsonSubTypes.dll ${TARGET_DIR}

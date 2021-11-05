@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <RootNamespace>VeVantZeData.Collector</RootNamespace>
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>VeVantZeData</AssemblyName>
     <Description>Ve Vant Ze Data Timberborn!</Description>
@@ -8,7 +9,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>9.0</LangVersion>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-
   </PropertyGroup>
 
   <ItemGroup>
@@ -45,6 +45,10 @@
 
   <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'netstandard'">
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Alerting/*.flux.template"/>
   </ItemGroup>
 
 </Project>
