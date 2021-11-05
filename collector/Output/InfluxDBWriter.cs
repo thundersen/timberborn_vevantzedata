@@ -18,20 +18,13 @@ namespace VeVantZeData.Collector.Output
 
         internal InfluxDBWriter(VeVantZeDataConfig config, Playthrough playthrough)
         {
-            var token = Environment.GetEnvironmentVariable("VEVANTZEDATA_INFLUXDB_TOKEN");
-
-            if (token == null)
-                Plugin.Log.LogError("Environment variable VEVANTZEDATA_INFLUXDB_TOKEN not found. Can't write to InfluxDB.");
-            else
-            {
-                _playthrough = playthrough;
-                _bucket = config.InfluxDBBucket;
-                _org = config.InfluxDBOrg;
-                _client = InfluxDBClientFactory.Create(config.InfluxDBAddress, token.ToCharArray());
-                _client.SetLogLevel(config.InfluxDBClientLogLevel);
-                Plugin.Log.LogDebug("influx db client created.");
-                _client.HealthAsync().ContinueWith(t => Plugin.Log.LogDebug(t.Result)).Wait();
-            }
+            _playthrough = playthrough;
+            _bucket = config.InfluxDBBucket;
+            _org = config.InfluxDBOrg;
+            _client = InfluxDBClientFactory.Create(config.InfluxDBAddress, config.InfluxDBToken);
+            _client.SetLogLevel(config.InfluxDBClientLogLevel);
+            Plugin.Log.LogDebug("influx db client created.");
+            _client.HealthAsync().ContinueWith(t => Plugin.Log.LogDebug(t.Result)).Wait();
         }
 
         public void Write(Data data)

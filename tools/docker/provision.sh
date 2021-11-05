@@ -45,6 +45,7 @@ sed -e 's/%%INFLUXDB_ORG%%/'${DOCKER_INFLUXDB_INIT_ORG}'/g' \
 echo "==> start grafana"
 docker-compose up -d grafana
 
-echo "==> done"
-echo "now you need to create this environment variable for the mod:"
-echo "VEVANTZEDATA_INFLUXDB_TOKEN=${MOD_TOKEN}"
+echo "==> done"; echo
+echo "IMPORTANT: the last thing you need to do is adding the InfluxDB authentication token to your mod config."
+echo "find the config file under '<Game Folder>/BepInEx/config' and add the token to the 'token' setting under [writers:influxdb]"
+echo "token = ${MOD_TOKEN}"
