@@ -9,6 +9,7 @@
 This mod streams data from the game to [InfluxDB](https://www.influxdata.com/) and/or CSV files. This allows the creation of nice graphs as shown above in [Grafana](https://grafana.com/grafana/) which can be viewed in the browser.
 
 Find setup instructions for InfluxDB and Grafana [here](https://github.com/thundersen/timberborn_vevantzedata/tree/main/doc/INFLUXDB_GRAFANA.md). Follow the instructions to set up preconfigured instances of InfluxDB and Grafana including an example dashboard.
+More in-depth setup instructions for Windows 10 have been written up in a Google doc by the great `Gaster_`. You can find those [here](https://docs.google.com/document/d/1LTzfByd6PZ83GKNFFgDzjDWHQZncah-uG4-X9i3yR6M/edit).
 
 A more detailed description of the mod's features can be found [here](https://github.com/thundersen/timberborn_vevantzedata/tree/main/doc/FEATURES.md).
 

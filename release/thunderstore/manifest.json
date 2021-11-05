@@ -1,6 +1,6 @@
 {
     "name": "VeVantZeData",
-    "version_number": "0.1.4",
+    "version_number": "0.1.5",
     "website_url": "https://github.com/thundersen/timberborn_vevantzedata",
     "description": "Show graphs about the game in the browser",
     "dependencies": [
