@@ -8,7 +8,9 @@
 
 The easiest way to set these up on your PC is to use the scripts available [here](https://github.com/thundersen/timberborn_vevantzedata/tree/main/tools/docker)
 
-If you're familiar with Docker, you can just clone the repo and run `provision.sh` to set up everything. That's it. Open http://localhost:3000 in your browser (default user and password are admin/admin) and find the empty default dashboard. Data will appear in it after a little while of playing the game with the mod enabled. Remember to set up the environment variable, as the output of `provision.sh` will have told you.
+If you're familiar with Docker, you can just clone the repo and run `provision.sh` to set up everything. That's it. Open http://localhost:3000 in your browser (default user and password are admin/admin) and find the empty default dashboard. Data will appear in it after a little while of playing the game with the mod enabled. 
+
+**Remember to add the InfluxDB token to the mod config, as the output of `provision.sh` will have told you.**
 
 If you don't know what Docker is, you might want to check out the [Wikipedia article](https://en.wikipedia.org/wiki/Docker_(software)) before continuing to read.
 
@@ -25,7 +27,7 @@ bash provision.sh
 ```
 This will copy the complete GitHub repository of the mod onto your system, go to subfolder `tools/docker` and run a script to start InfluxDB and Grafana in their own Docker containers and connect them with each other. 
 
-At the end of the text output of the script you will find the name and value of an [environment variable](https://helpdeskgeek.com/how-to/create-custom-environment-variables-in-windows/) which you need to set up for the mod to be able to write data to InfluxDB.
+**At the end of the text output of the script you will find the value of the InfluxDB token which the mod needs for writing data. Add it to the mod's config, as described in the script output.**
 
 That's it. You can now open Grafana in the browser and check out the default dashboard as described above.
 
@@ -45,7 +47,7 @@ After installation you will need to set up 3 things in InfluxDB for the mod to b
 2. An organization named `thundersen` (You can use a different name and change it in the mod's [config](#config-settings), if you want.)
 3. A [token](https://docs.influxdata.com/influxdb/cloud/security/tokens/create-token/) with write access to the `vevantzedata` bucket
 
-**Create an environment variable in your OS with the name `VEVANTZEDATA_INFLUXDB_TOKEN` and the token as its value.** [Here](https://helpdeskgeek.com/how-to/create-custom-environment-variables-in-windows/)'s a guide for creating environment variables in Windows.
+**Add the token to the mod's config under `BepInEx/config`**
 
 
 ### Grafana with InfluxDB
