@@ -33,7 +33,6 @@ TOKENS=$(docker exec -i \
   influxdb bash < ../influxdb/create_tokens.sh)
 
 GRAFANA_TOKEN=$(echo "${TOKENS}" | head -n1)
-MOD_TOKEN=$(echo "${TOKENS}" | tail -n1)
 
 echo "==> prepare data source config"
 sed -e 's/%%INFLUXDB_ORG%%/'${DOCKER_INFLUXDB_INIT_ORG}'/g' \
@@ -42,10 +41,7 @@ sed -e 's/%%INFLUXDB_ORG%%/'${DOCKER_INFLUXDB_INIT_ORG}'/g' \
     grafana/etc/provisioning/datasources/datasource.yaml.template \
   > grafana/etc/provisioning/datasources/datasource.yaml
 
-echo "==> start grafana"
-docker-compose up -d grafana
+echo "==> start grafana and forwarder"
+FORWARDER_TOKEN=$(echo "${TOKENS}" | tail -n1) docker-compose up -d --build
 
-echo "==> done"; echo
-echo "IMPORTANT: the last thing you need to do is adding the InfluxDB authentication token to your mod config."
-echo "find the config file under '<Game Folder>/BepInEx/config' and add the token to the 'token' setting under [writers:influxdb]"
-echo "token = ${MOD_TOKEN}"
+echo "==> done"

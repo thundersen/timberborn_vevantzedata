@@ -13,6 +13,8 @@ namespace forwarder
     {
         public static void Main(string[] args)
         {
+            Console.WriteLine($"FORWARDER_TOKEN: {System.Environment.GetEnvironmentVariable("FORWARDER_TOKEN")}");
+
             CreateHostBuilder(args).Build().Run();
         }
 

@@ -32,6 +32,21 @@ services:
     restart: always
     privileged: true
 
+  forwarder:
+    container_name: vevantzedata_forwarder
+    build: ../../forwarder
+    image: vevantzedata/forwarder
+    environment:
+      - FORWARDER_TOKEN
+    links:
+      - influxdb:influxdb
+    ports:
+      - 5000:80
+    depends_on:
+      - influxdb
+    restart: always
+      
+
 volumes:
   influxdb-lib:
     external: false
