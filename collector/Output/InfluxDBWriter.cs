@@ -16,6 +16,7 @@ namespace VeVantZeData.Collector.Output
         private readonly string _org;
         private readonly Playthrough _playthrough;
         private readonly InfluxDBClient _client;
+        private readonly WriteApi _writeApi;
 
         internal InfluxDBWriter(VeVantZeDataConfig config, Playthrough playthrough)
         {
@@ -33,6 +34,7 @@ namespace VeVantZeData.Collector.Output
                 _client.SetLogLevel(config.InfluxDBClientLogLevel);
                 Plugin.Log.LogDebug("influx db client created.");
                 _client.HealthAsync().ContinueWith(t => Plugin.Log.LogDebug(t.Result)).Wait();
+                _writeApi = _client.GetWriteApi();
             }
         }
 
@@ -46,10 +48,7 @@ namespace VeVantZeData.Collector.Output
                 points.AddRange(data.DistrictStocks.Select(kvp => PointFrom(kvp.Value, data.GameTime.GameTimeStamp, kvp.Key)));
                 points.AddRange(data.DistrictDaysOfStocks.Select(kvp => PointFrom(kvp.Value, data.GameTime.GameTimeStamp, kvp.Key)));
 
-                using (var writeApi = _client.GetWriteApi())
-                {
-                    writeApi.WritePoints(_bucket, _org, points);
-                }
+                _writeApi.WritePoints(_bucket, _org, points);
                 sw.Stop();
                 Plugin.Log.LogDebug($"{points.Count} points written to influxdb ({sw.ElapsedMilliseconds}ms)");
             }
